@@ -1,22 +1,22 @@
-import 'package:lista_de_tarefas_2_0/app/repositories/sql/sqflite.dart';
 import '../../core/database/sqlite_connection_factory.dart';
 import '../../core/exception/failure.dart';
 import '../../core/helpers/constants.dart';
 import '../../core/logger/app_logger.dart';
 import '../../models/item_model.dart';
+import 'sqflite_repository.dart';
 
-class SqfliteImpl implements Sqflite {
+class SqfliteRepositoryImpl implements SqfliteRepository {
   final SqliteConnectionFactory _sqliteConnection;
   final AppLogger _log;
 
-  const SqfliteImpl({
+  const SqfliteRepositoryImpl({
     required SqliteConnectionFactory sqliteConnection,
     required AppLogger log,
   })  : _sqliteConnection = sqliteConnection,
         _log = log;
 
   @override
-  Future<void> createItem(ItemModel itemModel) async {
+  Future<void> saveItem(ItemModel itemModel) async {
     try {
       final conn = await _sqliteConnection.openConnection();
       await conn.insert(Constants.NAME_BD, itemModel.toMap());

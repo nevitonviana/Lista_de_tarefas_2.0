@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/ui/extensions/theme_extension.dart';
+import '../../../core/widgtes/messages.dart';
 import '../home_controller.dart';
 
 // class CalendarButton extends StatelessWidget {
@@ -80,6 +81,7 @@ class CalendarButton2 extends StatelessWidget {
       onFocusChange: (value) async {
         FocusScope.of(context).unfocus();
         focusNode?.skipTraversal;
+        Messages.warning("Obrigatorio selecionar uma data");
         await _selectedDate(context);
       },
       onTap: () async {

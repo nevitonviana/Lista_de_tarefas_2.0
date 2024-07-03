@@ -1,7 +1,7 @@
 import '../../models/item_model.dart';
 
-abstract class Sqflite {
-  Future<void> createItem(ItemModel itemModel);
+abstract class SqfliteService {
+  Future<void> saveItem(ItemModel itemModel);
 
   Future<List<ItemModel>> getItemOption(String option);
 

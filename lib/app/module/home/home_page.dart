@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:validatorless/validatorless.dart';
 
+import '../../core/life_cycle/page_life_cycle_state.dart';
 import '../../core/ui/extensions/size_screen_extension.dart';
 import '../../core/widgtes/custom_button.dart';
 import '../../core/widgtes/custom_text_form_field.dart';
+import '../../core/widgtes/messages.dart';
+import '../../models/item_model.dart';
 import '../../models/list_options_enum.dart';
+import 'home_controller.dart';
 import 'widgets/calendar_button.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameEC = TextEditingController();
@@ -25,12 +29,8 @@ class _HomePageState extends State<HomePage> {
   final _quantityEC = TextEditingController();
 
   final _descriptionEC = TextEditingController();
-  final _dataEC = TextEditingController();
   final _focusNode = FocusNode();
-  final _focusNode1 = FocusScopeNode();
-
   String? _selectedOption;
-  String? _data;
 
   late OutlinedButton bb;
 
@@ -77,13 +77,16 @@ class _HomePageState extends State<HomePage> {
                     label: "Quantidade/Kg",
                     icon: Icons.numbers_sharp,
                   ),
-                  Visibility(
-                    child: CustomTextFormField(
-                      controller: _descriptionEC,
-                      label: "Obiservações",
-                      icon: Icons.description_rounded,
-                    ),
-                  ),
+                  Observer(builder: (_) {
+                    return Visibility(
+                      visible: controller.selectedOption == ListOptionsEnum.Outros.name,
+                      child: CustomTextFormField(
+                        controller: _descriptionEC,
+                        label: "Observações",
+                        icon: Icons.description_rounded,
+                      ),
+                    );
+                  }),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     child: Row(
@@ -99,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                             validator: Validatorless.required("Campo Obrigatorio"),
                             alignment: Alignment.center,
                             hint: const Text("Opições"),
-                            onChanged: (value) => _selectedOption = value,
+                            onChanged: (value) => controller.selectedOption = value,
                             items: ListOptionsEnum.values
                                 .map<DropdownMenuItem<String>>(
                                   (e) => DropdownMenuItem(
@@ -124,14 +127,15 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       final formValid = _formKey.currentState?.validate() ?? false;
                       _formKey.currentState?.save();
-                      if (formValid && _selectedOption != null) {
-                      } else {
-                        // CalendarButton();
-                        // bb.onPressed?.call();
-                        setState(() {
-                          // bb.onPressed?.call();
+                      if (formValid) {
+                        if (controller.selectedDateTime != null) {
+                          controller.saveProduct(
+                            name: _nameEC.text,
+                            barcode: _barcodeEC.text,
+                          );
+                        } else {
                           _focusNode.requestFocus();
-                        });
+                        }
                       }
                     },
                   ),

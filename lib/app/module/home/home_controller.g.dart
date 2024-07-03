@@ -25,10 +25,27 @@ mixin _$HomeController on HomeControllerBase, Store {
     });
   }
 
+  late final _$selectedOptionAtom =
+      Atom(name: 'HomeControllerBase.selectedOption', context: context);
+
+  @override
+  String? get selectedOption {
+    _$selectedOptionAtom.reportRead();
+    return super.selectedOption;
+  }
+
+  @override
+  set selectedOption(String? value) {
+    _$selectedOptionAtom.reportWrite(value, super.selectedOption, () {
+      super.selectedOption = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
-selectedDateTime: ${selectedDateTime}
+selectedDateTime: ${selectedDateTime},
+selectedOption: ${selectedOption}
     ''';
   }
 }

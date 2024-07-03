@@ -79,7 +79,7 @@ class ItemModel {
       'barcode': barcode,
       'description': description,
       'quantity': quantity,
-      'date': date,
+      'date': date.toIso8601String(),
       'options': options,
       'finished': finished == true ? 1 : 0,
     };
