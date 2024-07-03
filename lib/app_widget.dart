@@ -19,6 +19,7 @@ class AppWidget extends StatelessWidget {
             title: UiConfig.title,
             theme: UiConfig.theme,
             routerConfig: Modular.routerConfig,
+            // locale: const Locale("pt", "BR"),
           );
         });
   }
