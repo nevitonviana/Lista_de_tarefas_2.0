@@ -30,8 +30,6 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
 
   final _descriptionEC = TextEditingController();
   final _focusNode = FocusNode();
-  String? _selectedOption;
-
   late OutlinedButton bb;
 
   @override
@@ -41,6 +39,13 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
     _quantityEC.dispose();
     _barcodeEC.dispose();
     super.dispose();
+  }
+
+  _resetEditingController() {
+    _nameEC.clear();
+    _barcodeEC.clear();
+    _quantityEC.clear();
+    _descriptionEC.clear();
   }
 
   @override
@@ -132,7 +137,10 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                           controller.saveProduct(
                             name: _nameEC.text,
                             barcode: _barcodeEC.text,
+                            description: _descriptionEC.text,
+                            quantity: _quantityEC.text,
                           );
+                          _resetEditingController();
                         } else {
                           _focusNode.requestFocus();
                         }

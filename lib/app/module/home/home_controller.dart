@@ -42,9 +42,13 @@ abstract class HomeControllerBase with Store, ControllerLifeCycle {
         barcode: barcode,
         date: selectedDateTime!,
         options: selectedOption!,
+        description: description,
+        quantity: quantity,
         finished: false,
       );
       await _service.saveItem(item);
+      selectedOption = null;
+      selectedDateTime = null;
       Messages.success("Salvo com sucesso");
     } catch (e, s) {
       _log.error("Erro ao salvar dados", e, s);
