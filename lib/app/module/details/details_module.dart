@@ -14,6 +14,9 @@ class DetailsModule extends Module {
 
   @override
   void routes(r) {
-    r.child(Modular.initialRoute, child: (context) => const DetailsPage());
+    r.child(Modular.initialRoute,
+        child: (context) => DetailsPage(
+              name: "r.args.data",
+            ));
   }
 }
