@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:path/path.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../../core/life_cycle/page_life_cycle_state.dart';
@@ -30,7 +32,6 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
 
   final _descriptionEC = TextEditingController();
   final _focusNode = FocusNode();
-  late OutlinedButton bb;
 
   @override
   void dispose() {
@@ -83,6 +84,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                     icon: Icons.numbers_sharp,
                   ),
                   Observer(builder: (_) {
+                    // Midiaquery TODO
                     return Visibility(
                       visible: controller.selectedOption == ListOptionsEnum.Outros.name,
                       child: CustomTextFormField(
