@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import 'opitons_controller.dart';
-import 'opitons_page.dart';
+import 'options_controller.dart';
+import 'options_page.dart';
 
-class OpitonsModule extends Module {
+class OptionsModule extends Module {
 
     @override
     void binds(i) {
-        i.addLazySingleton(OpitonsController.new);
+        i.addLazySingleton(OptionsController.new);
     }
 
     @override
@@ -16,7 +16,7 @@ class OpitonsModule extends Module {
 
     @override
     void routes(r) {
-       r.child(Modular.initialRoute, child: (context) => const OpitonsPage());
+       r.child(Modular.initialRoute, child: (context) => const OptionsPage());
     }
     
  }

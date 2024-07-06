@@ -5,9 +5,9 @@ import '../../core/life_cycle/controller_life_cycle.dart';
 
 part 'start_page_controller.g.dart';
 
-class StartHomeController = StartHomeControllerBase with _$StartHomeController;
+class StartPageController = StartPageControllerBase with _$StartPageController;
 
-abstract class StartHomeControllerBase with Store, ControllerLifeCycle {
+abstract class StartPageControllerBase with Store, ControllerLifeCycle {
   final pageViewController = PageController();
 
   @override

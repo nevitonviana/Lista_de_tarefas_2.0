@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/life_cycle/page_life_cycle_state.dart';
 import '../home/home_page.dart';
+import '../options/options_page.dart';
 import 'start_page_controller.dart';
 
 class StartHomePage extends StatefulWidget {
@@ -11,15 +12,15 @@ class StartHomePage extends StatefulWidget {
   State<StartHomePage> createState() => _StartHomePageState();
 }
 
-class _StartHomePageState extends PageLifeCycleState<StartHomeController, StartHomePage> {
+class _StartHomePageState extends PageLifeCycleState<StartPageController, StartHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
         controller: controller.pageViewController,
-        children: [
-          const HomePage(),
-          Container(),
+        children: const [
+          OptionsPage(),
+          HomePage(),
         ],
       ),
       bottomNavigationBar: AnimatedBuilder(
@@ -28,7 +29,7 @@ class _StartHomePageState extends PageLifeCycleState<StartHomeController, StartH
             return BottomNavigationBar(
               // selectedItemColor: Colors.brown,
               backgroundColor: Colors.grey[200],
-              fixedColor: Color(5242915),
+              fixedColor: const Color(5242915),
               onTap: (value) => controller.pageViewController.jumpToPage(value),
               currentIndex: controller.pageViewController.page?.round() ?? 0,
               items: const [
