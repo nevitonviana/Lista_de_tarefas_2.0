@@ -1,5 +1,5 @@
 class ItemModel {
-  final String? id;
+  final int? id;
   final String name;
   final String barcode;
   final String? description;
@@ -51,7 +51,7 @@ class ItemModel {
   }
 
   ItemModel copyWith({
-    String? id,
+    int? id,
     String? name,
     String? barcode,
     String? description,
@@ -87,13 +87,13 @@ class ItemModel {
 
   factory ItemModel.fromMap(Map<String, dynamic> map) {
     return ItemModel(
-      id: map['id'] as String,
-      name: map['name'] as String,
-      barcode: map['barcode'] as String,
-      description: map['description'] as String,
-      quantity: map['quantity'] as String,
-      date: map['date'] as DateTime,
-      options: map['options'] as String,
+      id: map['id']?.toInt(),
+      name: map['name'] ?? '',
+      barcode: map['barcode'] ?? '',
+      description: map['description'] ?? '',
+      quantity: map['quantity'] ?? '',
+      date: DateTime.parse(map['date']),
+      options: map['options'] ?? '',
       finished: map['finished'] == 1,
     );
   }

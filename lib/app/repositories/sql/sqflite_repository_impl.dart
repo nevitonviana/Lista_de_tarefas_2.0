@@ -30,9 +30,8 @@ class SqfliteRepositoryImpl implements SqfliteRepository {
   Future<List<ItemModel>> getItemOption(String option) async {
     try {
       final conn = await _sqliteConnection.openConnection();
-      final result = await conn.rawQuery('''
-     select * from ${Constants.NAME_BD} where options = $option order by date asc
-     ''');
+      final result = await conn
+          .rawQuery('SELECT * FROM ${Constants.NAME_BD} WHERE options = ? order by date ASC ', [option]);
       return result.map((e) => ItemModel.fromMap(e)).toList();
     } on Failure catch (e, s) {
       _log.error("erro ao buscar os dados", e, s);

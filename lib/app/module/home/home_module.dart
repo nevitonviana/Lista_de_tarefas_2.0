@@ -15,15 +15,16 @@ import 'home_page.dart';
 class HomeModule extends Module {
   @override
   void binds(i) {
-    i.addLazySingleton<AppLogger>(LoggerAppLoggerImpl.new);
-    i.addLazySingleton(SqliteConnectionFactory.new);
-    i.addLazySingleton<SqfliteRepository>(SqfliteRepositoryImpl.new);
-    i.addLazySingleton<SqfliteService>(SqfliteServiceImpl.new);
     i.addLazySingleton(HomeController.new);
   }
 
   @override
+  List<Module> get imports => [
+        AppModule(),
+      ];
+
+  @override
   void routes(r) {
-    r.child(Modular.initialRoute, child: (context) => HomePage());
+    r.child(Modular.initialRoute, child: (context) => const HomePage());
   }
 }
