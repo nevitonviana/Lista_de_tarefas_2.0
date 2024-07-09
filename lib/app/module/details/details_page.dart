@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../core/life_cycle/page_life_cycle_state.dart';
 import '../../core/ui/extensions/size_screen_extension.dart';
@@ -39,9 +40,15 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                   itemBuilder: (context, index) {
                     print(controller.listItems.length);
                     final item = controller.listItems[index];
-                    return _CardDetail(
-                      name: item.name,
-                      data: item.date.toString(),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: _CardDetail(
+                        onTap: (){
+                          Modular.to.pushNamed('/details/detailsItem', arguments: item);
+                        },
+                        name: item.name,
+                        data: item.date.toString(),
+                      ),
                     );
                   },
                 )

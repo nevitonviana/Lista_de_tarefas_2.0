@@ -2,6 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../app_module.dart';
 import 'details_controller.dart';
+import 'details_item/details_item_module.dart';
 import 'details_page.dart';
 
 class DetailsModule extends Module {
@@ -23,5 +24,6 @@ class DetailsModule extends Module {
         name: r.args.data,
       ),
     );
+    r.module("/detailsItem", module: DetailsItemModule());
   }
 }
