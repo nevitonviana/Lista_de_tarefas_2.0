@@ -29,7 +29,6 @@ class _StartHomePageState extends PageLifeCycleState<StartPageController, StartH
             return BottomNavigationBar(
               // selectedItemColor: Colors.brown,
               backgroundColor: Colors.grey[200],
-              fixedColor: const Color(5242915),
               onTap: (value) => controller.pageViewController.jumpToPage(value),
               currentIndex: controller.pageViewController.page?.round() ?? 0,
               items: const [

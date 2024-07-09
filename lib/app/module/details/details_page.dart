@@ -38,7 +38,6 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
               ? ListView.builder(
                   itemCount: controller.listItems.length,
                   itemBuilder: (context, index) {
-                    print(controller.listItems.length);
                     final item = controller.listItems[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),

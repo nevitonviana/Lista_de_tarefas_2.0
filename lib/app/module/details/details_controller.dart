@@ -4,7 +4,6 @@ import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/logger/app_logger.dart';
 import '../../core/widgtes/messages.dart';
 import '../../models/item_model.dart';
-import '../../models/list_options_enum.dart';
 import '../../services/sql/sqflite_service.dart';
 
 part 'details_controller.g.dart';

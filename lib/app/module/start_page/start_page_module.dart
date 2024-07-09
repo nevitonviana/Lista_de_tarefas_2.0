@@ -1,11 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../details/details_item/details_item_module.dart';
 import '../details/details_module.dart';
 import '../home/home_module.dart';
-import '../home/home_page.dart';
-import 'start_page_controller.dart';
 import 'start_page.dart';
+import 'start_page_controller.dart';
 
 class StartPageModule extends Module {
   @override

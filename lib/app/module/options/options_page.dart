@@ -11,12 +11,12 @@ class OptionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _sizeRL = MediaQuery.sizeOf(context).width * .1;
+    final sizeRL = MediaQuery.sizeOf(context).width * .1;
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: Container(
-        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * .2, right: _sizeRL, left: _sizeRL),
+        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * .2, right: sizeRL, left: sizeRL),
         child: ListView(
           children: ListOptionsEnum.values
               .map(

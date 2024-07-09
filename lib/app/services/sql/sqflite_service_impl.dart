@@ -1,6 +1,6 @@
-import 'package:lista_de_tarefas_2_0/app/services/sql/sqflite_service.dart';
 import '../../models/item_model.dart';
 import '../../repositories/sql/sqflite_repository.dart';
+import 'sqflite_service.dart';
 
 class SqfliteServiceImpl implements SqfliteService {
   final SqfliteRepository _repository;

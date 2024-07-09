@@ -36,12 +36,6 @@ class DetailsItemPage extends StatelessWidget {
               _LabelWidget(
                   label: "Kg/Unidades", nameItem: _item.quantity!.isNotEmpty ? _item.quantity! : "1"),
               _LabelWidget(label: "Status do Produto", nameItem: _item.options),
-              Builder(
-                builder: (context) {
-                  print(_item.description?.isNotEmpty);
-                  return Container();
-                },
-              ),
               Visibility(
                 visible: _item.description!.isNotEmpty,
                 child: _LabelWidget(label: "Descrição", nameItem: _item.description ?? ""),
