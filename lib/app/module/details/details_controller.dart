@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 
 import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/logger/app_logger.dart';
+import '../../core/widgtes/loader.dart';
 import '../../core/widgtes/messages.dart';
 import '../../models/item_model.dart';
 import '../../services/sql/sqflite_service.dart';
@@ -35,6 +36,19 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     } catch (e, s) {
       _log.error("Erro ao busca os itens", e, s);
       Messages.warning("erro ao busca os itens");
+    }
+  }
+
+  @action
+  Future<void> deleteItem({required int id}) async {
+    try {
+      Loader.show();
+      await _service.deleteItem(id);
+      await _listItems.removeAt(id);
+      Loader.hide();
+    } catch (e, s) {
+      _log.error("erro ao deleta o item", e, s);
+      Messages.alert("Erro ao deleta o item");
     }
   }
 }
