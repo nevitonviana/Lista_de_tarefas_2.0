@@ -15,8 +15,8 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   final SqfliteService _service;
   final AppLogger _log;
 
-  @readonly
-  List _listItems = <ItemModel>[];
+  @observable
+  ObservableList<ItemModel> listItems = ObservableList<ItemModel>();
 
   DetailsControllerBase({required SqfliteService service, required AppLogger log})
       : _service = service,
@@ -27,11 +27,12 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     await getItems(params?['name'] ?? '');
   }
 
+  @action
   Future<void> getItems(String name) async {
     try {
       // Loader.show();
       final result = await _service.getItemOption(name);
-      _listItems = result;
+      listItems = result.asObservable();
       // Loader.hide();
     } catch (e, s) {
       _log.error("Erro ao busca os itens", e, s);
@@ -44,9 +45,10 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     try {
       Loader.show();
       await _service.deleteItem(id);
-      await _listItems.removeAt(id);
+      listItems.removeWhere((item) => item.id == id);
       Loader.hide();
     } catch (e, s) {
+      // MobXException("asasas");
       _log.error("erro ao deleta o item", e, s);
       Messages.alert("Erro ao deleta o item");
     }

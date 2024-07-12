@@ -4,8 +4,11 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../core/life_cycle/page_life_cycle_state.dart';
 import '../../core/ui/extensions/size_screen_extension.dart';
+import '../../models/item_model.dart';
 import 'details_controller.dart';
 import 'widgets/custom_dismissible.dart';
+import 'widgets/dialog_custom.dart';
+
 
 part 'widgets/card_detail.dart';
 
@@ -39,15 +42,20 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
               ? ListView.builder(
                   itemCount: controller.listItems.length,
                   itemBuilder: (context, index) {
-                    final item = controller.listItems[index];
+                    final ItemModel item = controller.listItems[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: CustomDismissible(
-                        onDismissed: (direction) {
+                        confirmDismiss: (direction) async {
                           if (direction == DismissDirection.startToEnd) {
                           } else {
-                            controller.deleteItem(id: item.id);
+                            await DialogCustom(context).dialogDelete(
+                              onPressedDelete: () async {
+                                await controller.deleteItem(id: item.id!);
+                              },
+                            );
                           }
+                          return true;
                         },
                         child: _CardDetail(
                           onTap: () {

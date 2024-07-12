@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class CustomDismissible extends StatelessWidget {
   final Widget child;
-  final DismissDirectionCallback onDismissed;
+  final ConfirmDismissCallback confirmDismiss;
 
-  const CustomDismissible({super.key, required this.child, required this.onDismissed});
+  const CustomDismissible({super.key, required this.child, required this.confirmDismiss});
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      onDismissed: onDismissed,
+      confirmDismiss: confirmDismiss,
       background: Container(
         color: Colors.blue.shade200,
         alignment: Alignment.centerLeft,
