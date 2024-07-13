@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/logger/app_logger.dart';
-import '../../core/widgtes/loader.dart';
-import '../../core/widgtes/messages.dart';
+
+import '../../core/widgets/loader.dart';
+import '../../core/widgets/messages.dart';
 import '../../models/item_model.dart';
 import '../../services/sql/sqflite_service.dart';
 
@@ -21,6 +24,7 @@ abstract class HomeControllerBase with Store, ControllerLifeCycle {
 
   @override
   void onInit([Map<String, dynamic>? params]) {}
+
   @observable
   DateTime? selectedDateTime;
   @observable
@@ -52,6 +56,20 @@ abstract class HomeControllerBase with Store, ControllerLifeCycle {
       Messages.alert("erro ao salvar o $name");
     } finally {
       Loader.hide();
+    }
+  }
+
+  @action
+  Future<void> updateItem({required ItemModel item}) async {
+    try {
+      Loader.show();
+      await _service.updateItem(item.copyWith(date: selectedDateTime, options: selectedOption));
+      Loader.hide();
+      Modular.to.pop(item);
+      // Modular.to.pop();
+    } catch (e, s) {
+      _log.error("Erro ao Atualizar o item", e, s);
+      Messages.alert("Erro ao salvar o item ${item.name}");
     }
   }
 }

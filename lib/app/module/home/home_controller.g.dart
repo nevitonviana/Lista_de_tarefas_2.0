@@ -41,6 +41,14 @@ mixin _$HomeController on HomeControllerBase, Store {
     });
   }
 
+  late final _$updateItemAsyncAction =
+      AsyncAction('HomeControllerBase.updateItem', context: context);
+
+  @override
+  Future<void> updateItem({required ItemModel item}) {
+    return _$updateItemAsyncAction.run(() => super.updateItem(item: item));
+  }
+
   @override
   String toString() {
     return '''

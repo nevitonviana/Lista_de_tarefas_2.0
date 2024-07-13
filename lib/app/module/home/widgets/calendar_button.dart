@@ -4,7 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/ui/extensions/theme_extension.dart';
-import '../../../core/widgtes/messages.dart';
+import '../../../core/widgets/messages.dart';
 import '../home_controller.dart';
 
 // class CalendarButton extends StatelessWidget {
@@ -67,7 +67,7 @@ class CalendarButton2 extends StatelessWidget {
     var lastDate = DateTime.now();
     lastDate = lastDate.add(const Duration(days: 10 * 365));
     controller.selectedDateTime = await showDatePicker(
-      initialDate: DateTime.now(),
+      initialDate: controller.selectedDateTime ?? DateTime.now(),
       context: context,
       firstDate: DateTime(2000),
       lastDate: lastDate,

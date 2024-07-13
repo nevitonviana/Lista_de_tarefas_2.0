@@ -18,7 +18,7 @@ class SqfliteServiceImpl implements SqfliteService {
       _repository.searchItemBarcodeOrName(search);
 
   @override
-  Future<void> updateItem(ItemModel itemModel) => _repository.saveItem(itemModel);
+  Future<void> updateItem(ItemModel itemModel) => _repository.updateItem(itemModel);
 
   @override
   Future<void> deleteItem(int id) => _repository.deleteItem(id);

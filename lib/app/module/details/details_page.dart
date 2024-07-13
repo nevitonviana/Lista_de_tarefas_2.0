@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../core/life_cycle/page_life_cycle_state.dart';
 import '../../core/ui/extensions/size_screen_extension.dart';
@@ -8,7 +9,6 @@ import '../../models/item_model.dart';
 import 'details_controller.dart';
 import 'widgets/custom_dismissible.dart';
 import 'widgets/dialog_custom.dart';
-
 
 part 'widgets/card_detail.dart';
 
@@ -48,6 +48,8 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                       child: CustomDismissible(
                         confirmDismiss: (direction) async {
                           if (direction == DismissDirection.startToEnd) {
+                            await Modular.to.pushNamed("/home", arguments: item);
+                            await controller.getItems(item.options);
                           } else {
                             await DialogCustom(context).dialogDelete(
                               onPressedDelete: () async {
@@ -55,7 +57,7 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                               },
                             );
                           }
-                          return true;
+                          return false;
                         },
                         child: _CardDetail(
                           onTap: () {

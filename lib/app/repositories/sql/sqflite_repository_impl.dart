@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 import '../../core/database/sqlite_connection_factory.dart';
 import '../../core/exception/failure.dart';
 import '../../core/helpers/constants.dart';
@@ -62,7 +64,7 @@ class SqfliteRepositoryImpl implements SqfliteRepository {
   Future<void> updateItem(ItemModel itemModel) async {
     try {
       final conn = await _sqliteConnection.openConnection();
-      await conn.update(Constants.NAME_BD, itemModel.toMap(), where: "id = ?", whereArgs: [itemModel.id]);
+      await conn.update(Constants.NAME_BD, itemModel.toMap(), where: 'id = ?', whereArgs: [itemModel.id]);
     } on Failure catch (e, s) {
       _log.error("error ao atualizar o item", e, s);
       throw const Failure(message: "Erro ao atualizar o Item");

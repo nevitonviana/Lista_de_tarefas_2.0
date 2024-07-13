@@ -2,8 +2,9 @@ import 'package:mobx/mobx.dart';
 
 import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/logger/app_logger.dart';
-import '../../core/widgtes/loader.dart';
-import '../../core/widgtes/messages.dart';
+
+import '../../core/widgets/loader.dart';
+import '../../core/widgets/messages.dart';
 import '../../models/item_model.dart';
 import '../../services/sql/sqflite_service.dart';
 
@@ -32,6 +33,7 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     try {
       // Loader.show();
       final result = await _service.getItemOption(name);
+      print(result);
       listItems = result.asObservable();
       // Loader.hide();
     } catch (e, s) {

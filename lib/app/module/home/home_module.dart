@@ -17,6 +17,11 @@ class HomeModule extends Module {
 
   @override
   void routes(r) {
-    r.child(Modular.initialRoute, child: (context) => const HomePage());
+    r.child(
+      Modular.initialRoute,
+      child: (context) => HomePage(
+        model: r.args.data,
+      ),
+    );
   }
 }
