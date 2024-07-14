@@ -35,6 +35,31 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
       appBar: AppBar(
         title: Text(widget._name),
         centerTitle: true,
+        actions: [
+          Observer(
+            builder: (context) {
+              return Visibility(
+                visible:  controller.listItems.isNotEmpty,
+                child: IconButton(
+                  onPressed: () {
+                    DialogCustom(context).dialogDelete(
+                      onPressedDelete: () {
+                        controller.deleteAllItems(optionOfDeletes: widget._name);
+                      },
+                      label: ' todos os itens de ${widget._name}',
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                    opticalSize: 30,
+                    size: 30,
+                  ),
+                ),
+              );
+            }
+          ),
+        ],
       ),
       body: Observer(
         builder: (_) {
@@ -43,6 +68,7 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                   itemCount: controller.listItems.length,
                   itemBuilder: (context, index) {
                     final ItemModel item = controller.listItems[index];
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: CustomDismissible(
@@ -52,6 +78,7 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                             await controller.getItems(item.options);
                           } else {
                             await DialogCustom(context).dialogDelete(
+                              label: item.name,
                               onPressedDelete: () async {
                                 await controller.deleteItem(id: item.id!);
                               },

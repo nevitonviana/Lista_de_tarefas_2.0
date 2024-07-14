@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart' as mox;
 
 class DialogCustom {
   final BuildContext _context;
 
   DialogCustom(BuildContext context) : _context = context;
 
-  dialogDelete({required VoidCallback onPressedDelete}) {
+  dialogDelete({required VoidCallback onPressedDelete, required String label}) {
     showDialog(
       context: _context,
       builder: (context) => AlertDialog(
-        title: const Text("Deletar"),
+        title: const Text("Deleta"),
         alignment: Alignment.center,
+        content:  Text("Tem certeza que gostariade apagar, $label ?", style: TextStyle(fontSize: 17),),
         actions: [
           TextButton.icon(
             onPressed: () async {
@@ -23,9 +23,6 @@ class DialogCustom {
           ),
           TextButton.icon(
             onPressed: () {
-              mox.runInAction(
-                () {},
-              );
               Navigator.pop(context);
             },
             label: const Text("Cancelar"),

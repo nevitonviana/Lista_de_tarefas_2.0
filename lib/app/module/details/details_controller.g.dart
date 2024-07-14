@@ -41,6 +41,20 @@ mixin _$DetailsController on DetailsControllerBase, Store {
     return _$deleteItemAsyncAction.run(() => super.deleteItem(id: id));
   }
 
+  late final _$DetailsControllerBaseActionController =
+      ActionController(name: 'DetailsControllerBase', context: context);
+
+  @override
+  void deleteAllItems({required String optionOfDeletes}) {
+    final _$actionInfo = _$DetailsControllerBaseActionController.startAction(
+        name: 'DetailsControllerBase.deleteAllItems');
+    try {
+      return super.deleteAllItems(optionOfDeletes: optionOfDeletes);
+    } finally {
+      _$DetailsControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

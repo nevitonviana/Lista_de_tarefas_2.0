@@ -35,6 +35,8 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
       final result = await _service.getItemOption(name);
       print(result);
       listItems = result.asObservable();
+      print(listItems.isNotEmpty);
+      print(listItems.isEmpty);
       // Loader.hide();
     } catch (e, s) {
       _log.error("Erro ao busca os itens", e, s);
@@ -53,6 +55,19 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
       // MobXException("asasas");
       _log.error("erro ao deleta o item", e, s);
       Messages.alert("Erro ao deleta o item");
+    }
+  }
+
+  @action
+  void deleteAllItems({required String optionOfDeletes}) {
+    try {
+      Loader.show();
+      _service.deleteItemAllOfOptions(optionOfDeletes);
+      listItems.clear();
+      Loader.hide();
+    } catch (e, s) {
+      _log.error("Erro ao deleta todos os itens ", e, s);
+      Messages.alert('Erro ao deleta todos os itens de $optionOfDeletes');
     }
   }
 }
