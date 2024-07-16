@@ -7,7 +7,7 @@ class CustomTextFormField extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final String label;
   final IconData? icon;
-  final IconData? suffixIcon;
+  final Widget? suffixIcon;
   final double horizontalSize;
   final TextInputType textInputType;
 
@@ -39,7 +39,7 @@ class CustomTextFormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           prefixIcon: Icon(icon),
-          suffixIcon: Icon(suffixIcon),
+          suffixIcon: suffixIcon,
         ),
       ),
     );

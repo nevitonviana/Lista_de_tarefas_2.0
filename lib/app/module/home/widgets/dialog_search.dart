@@ -8,7 +8,10 @@ class DialogSearch {
 
   DialogSearch({required BuildContext context}) : _context = context;
 
-  showSearch({required TextEditingController controller, required VoidCallback onPressed}) {
+  showSearch(
+      {required TextEditingController controller,
+      required VoidCallback onPressed,
+      required VoidCallback onPressedIcon}) {
     showDialog(
       context: _context,
       // ignore: no_leading_underscores_for_local_identifiers
@@ -27,7 +30,7 @@ class DialogSearch {
         content: CustomTextFormField(
           controller: controller,
           label: "Nome / Codigo",
-          suffixIcon: Icons.barcode_reader,
+          suffixIcon: IconButton(onPressed: onPressedIcon, icon: const Icon(Icons.barcode_reader)),
         ),
         actions: [
           CustomButton(

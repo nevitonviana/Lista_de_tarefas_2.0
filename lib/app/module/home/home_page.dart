@@ -5,7 +5,6 @@ import 'package:validatorless/validatorless.dart';
 
 import '../../core/life_cycle/page_life_cycle_state.dart';
 import '../../core/ui/extensions/size_screen_extension.dart';
-
 import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/custom_text_form_field.dart';
 import '../../models/item_model.dart';
@@ -77,6 +76,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
             child: IconButton(
               onPressed: () {
                 DialogSearch(context: context).showSearch(
+                  onPressedIcon: () async => _nameEC.text = await controller.barcodeScanner(),
                   controller: _nameEC,
                   onPressed: () async {
                     await Modular.to.pushNamed("/details/details?searchItem=${_nameEC.text}");
@@ -144,25 +144,23 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                         focusNode: _focusNode,
                       ),
                       Expanded(
-                        child: Observer(
-                          builder: (_) {
-                            return DropdownButtonFormField(
-                              value: controller.selectedOption,
-                              validator: Validatorless.required("Campo Obrigatorio"),
-                              alignment: Alignment.center,
-                              hint: const Text("Opições"),
-                              onChanged: (value) => controller.selectedOption = value,
-                              items: ListOptionsEnum.values
-                                  .map<DropdownMenuItem<String>>(
-                                    (e) => DropdownMenuItem(
-                                      value: e.name,
-                                      child: Text(e.name),
-                                    ),
-                                  )
-                                  .toList(),
-                            );
-                          }
-                        ),
+                        child: Observer(builder: (_) {
+                          return DropdownButtonFormField(
+                            value: controller.selectedOption,
+                            validator: Validatorless.required("Campo Obrigatorio"),
+                            alignment: Alignment.center,
+                            hint: const Text("Opições"),
+                            onChanged: (value) => controller.selectedOption = value,
+                            items: ListOptionsEnum.values
+                                .map<DropdownMenuItem<String>>(
+                                  (e) => DropdownMenuItem(
+                                    value: e.name,
+                                    child: Text(e.name),
+                                  ),
+                                )
+                                .toList(),
+                          );
+                        }),
                       )
                     ],
                   ),
@@ -170,7 +168,9 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                 CustomButton(
                   label: "Escaniar",
                   icon: Icons.camera_enhance_outlined,
-                  onPressed: () {},
+                  onPressed: () async {
+                    _barcodeEC.text = await controller.barcodeScanner();
+                  },
                 ),
                 CustomButton(
                   label: "Salvar",

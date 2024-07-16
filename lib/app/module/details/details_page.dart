@@ -40,7 +40,7 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
         actions: [
           Observer(builder: (context) {
             return Visibility(
-              visible: controller.listItems.isNotEmpty || widget._name != null,
+              visible: controller.listItems.isNotEmpty && widget._name != null,
               child: IconButton(
                 onPressed: () {
                   DialogCustom(context).dialogDelete(

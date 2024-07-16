@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../core/barcode_scanner/barcode_scanner.dart';
 import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/logger/app_logger.dart';
 import '../../core/widgets/loader.dart';
@@ -15,10 +16,13 @@ class HomeController = HomeControllerBase with _$HomeController;
 abstract class HomeControllerBase with Store, ControllerLifeCycle {
   final SqfliteService _service;
   final AppLogger _log;
+  final BarcodeScanner _scanner;
 
-  HomeControllerBase({required SqfliteService service, required AppLogger log})
+  HomeControllerBase(
+      {required SqfliteService service, required AppLogger log, required BarcodeScanner scanner})
       : _service = service,
-        _log = log;
+        _log = log,
+        _scanner = scanner;
 
   @override
   void onInit([Map<String, dynamic>? params]) {}
@@ -67,6 +71,22 @@ abstract class HomeControllerBase with Store, ControllerLifeCycle {
     } catch (e, s) {
       _log.error("Erro ao Atualizar o item", e, s);
       Messages.alert("Erro ao salvar o item ${item.name}");
+    }
+  }
+
+  Future<String> barcodeScanner() async {
+    try {
+      final result = await _scanner.barcodeScanner();
+      if (result != '-1') {
+        return result;
+      } else {
+        Messages.warning("Codigo de Barra invalido");
+        return '';
+      }
+    } catch (e, s) {
+      _log.error("Erro ao Scanner Codego de barra", e, s);
+      Messages.alert("Erro ao Scanner codigo de barrar");
+      return '';
     }
   }
 }

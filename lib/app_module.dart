@@ -1,5 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'app/core/barcode_scanner/barcode_scanner.dart';
+import 'app/core/barcode_scanner/barcode_scanner_impl.dart';
 import 'app/core/database/sqlite_connection_factory.dart';
 import 'app/core/logger/app_logger.dart';
 import 'app/core/logger/logger_app_logger_impl.dart';
@@ -19,6 +21,7 @@ class AppModule extends Module {
     i.addLazySingleton(SqliteConnectionFactory.new);
     i.addLazySingleton<SqfliteRepository>(SqfliteRepositoryImpl.new);
     i.addLazySingleton<SqfliteService>(SqfliteServiceImpl.new);
+    i.addLazySingleton<BarcodeScanner>(BarcodeScannerImpl.new);
   }
 
   @override
