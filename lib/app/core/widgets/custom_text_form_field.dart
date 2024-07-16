@@ -6,7 +6,8 @@ class CustomTextFormField extends StatelessWidget {
   final String? initialValue;
   final FormFieldValidator<String>? validator;
   final String label;
-  final IconData icon;
+  final IconData? icon;
+  final IconData? suffixIcon;
   final double horizontalSize;
   final TextInputType textInputType;
 
@@ -16,10 +17,10 @@ class CustomTextFormField extends StatelessWidget {
       this.focusNode,
       this.initialValue,
       required this.label,
-      required this.icon,
+      this.icon,
       this.horizontalSize = 0,
       this.textInputType = TextInputType.text,
-      this.validator});
+      this.validator, this.suffixIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +39,7 @@ class CustomTextFormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           prefixIcon: Icon(icon),
-          // errorText: "data",
-          // floatingLabelBehavior: FloatingLabelBehavior.always
+          suffixIcon: Icon(suffixIcon),
         ),
       ),
     );

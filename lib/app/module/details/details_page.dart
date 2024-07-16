@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:mobx/mobx.dart';
 
 import '../../core/life_cycle/page_life_cycle_state.dart';
 import '../../core/ui/extensions/size_screen_extension.dart';
@@ -13,12 +12,15 @@ import 'widgets/dialog_custom.dart';
 part 'widgets/card_detail.dart';
 
 class DetailsPage extends StatefulWidget {
-  final String _name;
+  final String? _name;
+  final String? _searchItem;
 
-  const DetailsPage({
+  const DetailsPage( {
     super.key,
-    required String name,
-  }) : _name = name;
+    String? name,
+    String? searchItem,
+  })  : _name = name,
+        _searchItem = searchItem;
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
@@ -26,39 +28,37 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPage> {
   @override
-  Map<String, dynamic>? get params => {'name': widget._name};
+  Map<String, dynamic>? get params => {'name': widget._name, 'searchItem': widget._searchItem};
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        title: Text(widget._name),
+        title: Text(widget._name ?? "Resultados"),
         centerTitle: true,
         actions: [
-          Observer(
-            builder: (context) {
-              return Visibility(
-                visible:  controller.listItems.isNotEmpty,
-                child: IconButton(
-                  onPressed: () {
-                    DialogCustom(context).dialogDelete(
-                      onPressedDelete: () {
-                        controller.deleteAllItems(optionOfDeletes: widget._name);
-                      },
-                      label: ' todos os itens de ${widget._name}',
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                    opticalSize: 30,
-                    size: 30,
-                  ),
+          Observer(builder: (context) {
+            return Visibility(
+              visible: controller.listItems.isNotEmpty || widget._name != null,
+              child: IconButton(
+                onPressed: () {
+                  DialogCustom(context).dialogDelete(
+                    onPressedDelete: () {
+                      controller.deleteAllItems(optionOfDeletes: widget._name!);
+                    },
+                    label: ' todos os itens de ${widget._name}',
+                  );
+                },
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  opticalSize: 30,
+                  size: 30,
                 ),
-              );
-            }
-          ),
+              ),
+            );
+          }),
         ],
       ),
       body: Observer(
@@ -104,7 +104,7 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                       style: const TextStyle(fontSize: 20, color: Colors.black54),
                       children: [
                         TextSpan(
-                          text: widget._name,
+                          text: widget._name ?? "Resultado",
                           style: const TextStyle(color: Colors.black, decoration: TextDecoration.underline),
                         ),
                       ],

@@ -1,5 +1,3 @@
-import 'package:sqflite/sqflite.dart';
-
 import '../../core/database/sqlite_connection_factory.dart';
 import '../../core/exception/failure.dart';
 import '../../core/helpers/constants.dart';
@@ -44,15 +42,16 @@ class SqfliteRepositoryImpl implements SqfliteRepository {
   @override
   Future<List<ItemModel>> searchItemBarcodeOrName(String search) async {
     try {
-      var resultList;
+      List<ItemModel> resultList = [];
       final conn = await _sqliteConnection.openConnection();
       final result = await conn.query(Constants.NAME_BD);
-      resultList.add((result.map(
-        (e) => ItemModel.fromMap(e).barcode == search,
-      )) as Map<String, Object?>);
-      resultList.add((result.map(
-        (e) => ItemModel.fromMap(e).name == search,
-      )) as Map<String, Object?>);
+      result.map<ItemModel>((e) => ItemModel.fromMap(e)).forEach(
+        (element) {
+          if (element.name.contains(search) || element.barcode.contains(search)) {
+            resultList.add(element);
+          }
+        },
+      );
       return resultList;
     } on Failure catch (e, s) {
       _log.error("erro ao busca o itens", e, s);

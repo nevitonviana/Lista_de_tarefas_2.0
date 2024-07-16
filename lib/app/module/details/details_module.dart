@@ -19,9 +19,10 @@ class DetailsModule extends Module {
   @override
   void routes(r) {
     r.child(
-      Modular.initialRoute,
+      '/details',
       child: (context) => DetailsPage(
-        name: r.args.data,
+        name: r.args.queryParams['name'],
+        searchItem: r.args.queryParams['searchItem'],
       ),
     );
     r.module("/detailsItem", module: DetailsItemModule());

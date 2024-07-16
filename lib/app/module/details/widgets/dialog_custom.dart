@@ -11,7 +11,7 @@ class DialogCustom {
       builder: (context) => AlertDialog(
         title: const Text("Deleta"),
         alignment: Alignment.center,
-        content:  Text("Tem certeza que gostariade apagar, $label ?", style: TextStyle(fontSize: 17),),
+        content:  Text("Tem certeza que gostariade apagar, $label ?", style: const TextStyle(fontSize: 17),),
         actions: [
           TextButton.icon(
             onPressed: () async {

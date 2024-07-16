@@ -25,7 +25,11 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
 
   @override
   Future<void> onInit([Map<String, dynamic>? params]) async {
-    await getItems(params?['name'] ?? '');
+    if (params?['name'] != null) {
+      await getItems(params?['name']);
+    } else {
+      searchItemNameOrBarcode(search: params?['searchItem'] ?? '');
+    }
   }
 
   @action
@@ -33,10 +37,7 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     try {
       // Loader.show();
       final result = await _service.getItemOption(name);
-      print(result);
       listItems = result.asObservable();
-      print(listItems.isNotEmpty);
-      print(listItems.isEmpty);
       // Loader.hide();
     } catch (e, s) {
       _log.error("Erro ao busca os itens", e, s);
@@ -68,6 +69,18 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     } catch (e, s) {
       _log.error("Erro ao deleta todos os itens ", e, s);
       Messages.alert('Erro ao deleta todos os itens de $optionOfDeletes');
+    }
+  }
+
+  Future<void> searchItemNameOrBarcode({required String search}) async {
+    try {
+      // Loader.show();
+      final result = await _service.searchItemBarcodeOrName(search);
+      listItems = result.asObservable();
+      // Loader.hide();
+    } catch (e, s) {
+      _log.error("Erro ao buscar itens no banco de Dadods", e, s);
+      Messages.alert("Erro ao buacar dados ");
     }
   }
 }

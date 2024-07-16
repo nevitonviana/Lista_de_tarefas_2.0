@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../../core/life_cycle/page_life_cycle_state.dart';
@@ -11,6 +12,7 @@ import '../../models/item_model.dart';
 import '../../models/list_options_enum.dart';
 import 'home_controller.dart';
 import 'widgets/calendar_button.dart';
+import 'widgets/dialog_search.dart';
 
 class HomePage extends StatefulWidget {
   final ItemModel? _item;
@@ -68,6 +70,25 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: IconButton(
+              onPressed: () {
+                DialogSearch(context: context).showSearch(
+                  controller: _nameEC,
+                  onPressed: () {
+                    Modular.to.pushNamed("/details/details?searchItem=${_nameEC.text}");
+                  },
+                );
+              },
+              icon: const Icon(
+                Icons.search_outlined,
+                size: 30,
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -80,21 +101,18 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomTextFormField(
-                  // initialValue: "widget._item?.name",
                   controller: _nameEC,
                   label: "Nome Produto",
                   icon: Icons.drive_file_rename_outline_outlined,
                   validator: Validatorless.required("Campo Obrigatorio"),
                 ),
                 CustomTextFormField(
-                  // initialValue: widget._item?.barcode,
                   controller: _barcodeEC,
                   label: "Codigo",
                   icon: Icons.integration_instructions_sharp,
                   validator: Validatorless.required("Campo Obrigatorio"),
                 ),
                 CustomTextFormField(
-                  // initialValue: widget._item?.quantity,
                   controller: _quantityEC,
                   label: "Quantidade/Kg",
                   icon: Icons.numbers_sharp,

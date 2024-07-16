@@ -19,8 +19,8 @@ class _StartHomePageState extends PageLifeCycleState<StartPageController, StartH
       body: PageView(
         controller: controller.pageViewController,
         children: const [
-          OptionsPage(),
           HomePage(),
+          OptionsPage(),
         ],
       ),
       bottomNavigationBar: AnimatedBuilder(

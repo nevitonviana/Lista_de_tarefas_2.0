@@ -23,7 +23,7 @@ class OptionsPage extends StatelessWidget {
                 (e) => _CardOption(
                   label: e.name,
                   icon: e.icon,
-                  onTap: () => Modular.to.pushNamed("/details", arguments: e.name),
+                  onTap: () => Modular.to.pushNamed("/details/details?name=${e.name}"),
                 ),
               )
               .toList(),

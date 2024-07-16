@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:mobx/mobx.dart';
 
 import '../../../core/ui/extensions/size_screen_extension.dart';
 import '../../../models/item_model.dart';
 
+part 'widgets/buttons_widget.dart';
 part 'widgets/label_widget.dart';
 
-part 'widgets/buttons_widget.dart';
-
+// ignore: must_be_immutable
 class DetailsItemPage extends StatefulWidget {
   ItemModel _item;
 
