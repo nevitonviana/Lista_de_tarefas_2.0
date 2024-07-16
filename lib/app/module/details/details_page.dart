@@ -15,7 +15,7 @@ class DetailsPage extends StatefulWidget {
   final String? _name;
   final String? _searchItem;
 
-  const DetailsPage( {
+  const DetailsPage({
     super.key,
     String? name,
     String? searchItem,
@@ -75,7 +75,9 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                         confirmDismiss: (direction) async {
                           if (direction == DismissDirection.startToEnd) {
                             await Modular.to.pushNamed("/home", arguments: item);
-                            await controller.getItems(item.options);
+                            widget._searchItem == null
+                                ? await controller.getItems(item.options)
+                                : controller.searchItemNameOrBarcode(search: widget._searchItem!);
                           } else {
                             await DialogCustom(context).dialogDelete(
                               label: item.name,
@@ -87,8 +89,11 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                           return false;
                         },
                         child: _CardDetail(
-                          onTap: () {
-                            Modular.to.pushNamed('/details/detailsItem', arguments: item);
+                          onTap: () async {
+                            await Modular.to.pushNamed('/details/detailsItem', arguments: item);
+                            widget._searchItem == null
+                                ? await controller.getItems(item.options)
+                                : controller.searchItemNameOrBarcode(search: widget._searchItem!);
                           },
                           name: item.name,
                           data: item.date.toString(),

@@ -37,6 +37,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
     _descriptionEC.dispose();
     _quantityEC.dispose();
     _barcodeEC.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -77,8 +78,9 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
               onPressed: () {
                 DialogSearch(context: context).showSearch(
                   controller: _nameEC,
-                  onPressed: () {
-                    Modular.to.pushNamed("/details/details?searchItem=${_nameEC.text}");
+                  onPressed: () async {
+                    await Modular.to.pushNamed("/details/details?searchItem=${_nameEC.text}");
+                    _nameEC.clear();
                   },
                 );
               },
@@ -108,6 +110,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                 ),
                 CustomTextFormField(
                   controller: _barcodeEC,
+                  textInputType: TextInputType.number,
                   label: "Codigo",
                   icon: Icons.integration_instructions_sharp,
                   validator: Validatorless.required("Campo Obrigatorio"),
@@ -141,20 +144,24 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                         focusNode: _focusNode,
                       ),
                       Expanded(
-                        child: DropdownButtonFormField(
-                          value: controller.selectedOption,
-                          validator: Validatorless.required("Campo Obrigatorio"),
-                          alignment: Alignment.center,
-                          hint: const Text("Opições"),
-                          onChanged: (value) => controller.selectedOption = value,
-                          items: ListOptionsEnum.values
-                              .map<DropdownMenuItem<String>>(
-                                (e) => DropdownMenuItem(
-                                  value: e.name,
-                                  child: Text(e.name),
-                                ),
-                              )
-                              .toList(),
+                        child: Observer(
+                          builder: (_) {
+                            return DropdownButtonFormField(
+                              value: controller.selectedOption,
+                              validator: Validatorless.required("Campo Obrigatorio"),
+                              alignment: Alignment.center,
+                              hint: const Text("Opições"),
+                              onChanged: (value) => controller.selectedOption = value,
+                              items: ListOptionsEnum.values
+                                  .map<DropdownMenuItem<String>>(
+                                    (e) => DropdownMenuItem(
+                                      value: e.name,
+                                      child: Text(e.name),
+                                    ),
+                                  )
+                                  .toList(),
+                            );
+                          }
                         ),
                       )
                     ],
