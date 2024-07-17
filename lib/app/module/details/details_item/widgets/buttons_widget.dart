@@ -2,9 +2,9 @@ part of '../details_item_page.dart';
 
 class _ButtonsWidget extends StatelessWidget {
   final VoidCallback onTapEdit;
-  final VoidCallback onTapShare;
+  final String barcode;
 
-  const _ButtonsWidget({required this.onTapEdit, required this.onTapShare});
+  const _ButtonsWidget({required this.onTapEdit, required  this.barcode});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,24 @@ class _ButtonsWidget extends StatelessWidget {
           style: OutlinedButton.styleFrom(backgroundColor: Colors.grey.shade200),
         ),
         IconButton(
-          onPressed: onTapShare,
+          onPressed: () {
+            ShowBarcode().generator(context: context, barcode: barcode);
+          },
+          icon: const Icon(
+            CupertinoIcons.barcode,
+            size: 35,
+            color: Colors.black,
+          ),
+          style: IconButton.styleFrom(
+            backgroundColor: Colors.grey.shade200,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+              side: const BorderSide(width: 1.5, color: Colors.black38),
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {},
           icon: const Icon(
             Icons.share_sharp,
             size: 30,
@@ -40,7 +57,7 @@ class _ButtonsWidget extends StatelessWidget {
               side: const BorderSide(width: 1.5, color: Colors.black38),
             ),
           ),
-        )
+        ),
       ],
     );
   }

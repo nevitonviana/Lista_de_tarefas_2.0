@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../core/ui/extensions/size_screen_extension.dart';
 import '../../../models/item_model.dart';
+import 'widgets/show_barcode.dart';
 
 part 'widgets/buttons_widget.dart';
+
 part 'widgets/label_widget.dart';
 
 // ignore: must_be_immutable
@@ -37,7 +40,10 @@ class _DetailsItemPageState extends State<DetailsItemPage> {
               _LabelWidget(
                 label: "Codigo Do Produto",
                 nameItem: widget._item.barcode,
-                onPressed: () {},
+                onPressed: () async {
+                  print(widget._item.barcode.padLeft(13,'0'));
+                  print(widget._item.barcode.length);
+                },
               ),
               _LabelWidget(
                   label: "Kg/Unidades",
@@ -49,11 +55,11 @@ class _DetailsItemPageState extends State<DetailsItemPage> {
               ),
               const SizedBox(height: 20),
               _ButtonsWidget(
+                barcode: widget._item.barcode,
                 onTapEdit: () async {
                   widget._item = (await Modular.to.pushNamed<ItemModel>("/home", arguments: widget._item))!;
                   setState(() {});
                 },
-                onTapShare: () {},
               ),
             ],
           ),
