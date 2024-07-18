@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_share/flutter_share.dart';
 
 import '../../../core/life_cycle/page_life_cycle_state.dart';
 import '../../../core/ui/extensions/size_screen_extension.dart';
+import '../../../core/widgets/messages.dart';
 import '../../../models/item_model.dart';
 import 'details_item_controller.dart';
 import 'widgets/show_barcode.dart';
@@ -44,8 +46,8 @@ class _DetailsItemPageState extends PageLifeCycleState<DetailsItemController, De
                 label: "Codigo Do Produto",
                 nameItem: widget._item.barcode,
                 onPressed: () async {
-                  print(widget._item.barcode.padLeft(13, '0'));
-                  print(widget._item.barcode.length);
+                  Clipboard.setData(ClipboardData(text: widget._item.barcode));
+                  Messages.info("Copiando...");
                 },
               ),
               _LabelWidget(

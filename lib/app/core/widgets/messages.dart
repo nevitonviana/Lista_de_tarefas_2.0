@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:asuka/asuka.dart';
 
 class Messages {
@@ -13,5 +15,9 @@ class Messages {
 
   static void warning(String message) {
     AsukaMaterialBanner.warning(message).show();
+  }
+
+  static void info(String message) {
+    AsukaSnackbar.info(message).show();
   }
 }
