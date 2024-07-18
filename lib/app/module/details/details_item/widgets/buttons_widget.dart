@@ -2,9 +2,10 @@ part of '../details_item_page.dart';
 
 class _ButtonsWidget extends StatelessWidget {
   final VoidCallback onTapEdit;
+  final VoidCallback onTapShare;
   final String barcode;
 
-  const _ButtonsWidget({required this.onTapEdit, required  this.barcode});
+  const _ButtonsWidget({required this.onTapEdit, required  this.barcode, required this.onTapShare});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,7 @@ class _ButtonsWidget extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed:onTapShare,
           icon: const Icon(
             Icons.share_sharp,
             size: 30,

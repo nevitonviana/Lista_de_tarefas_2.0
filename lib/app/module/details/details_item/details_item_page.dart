@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_share/flutter_share.dart';
 
+import '../../../core/life_cycle/page_life_cycle_state.dart';
 import '../../../core/ui/extensions/size_screen_extension.dart';
 import '../../../models/item_model.dart';
+import 'details_item_controller.dart';
 import 'widgets/show_barcode.dart';
 
 part 'widgets/buttons_widget.dart';
@@ -23,7 +26,7 @@ class DetailsItemPage extends StatefulWidget {
   State<DetailsItemPage> createState() => _DetailsItemPageState();
 }
 
-class _DetailsItemPageState extends State<DetailsItemPage> {
+class _DetailsItemPageState extends PageLifeCycleState<DetailsItemController, DetailsItemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +44,7 @@ class _DetailsItemPageState extends State<DetailsItemPage> {
                 label: "Codigo Do Produto",
                 nameItem: widget._item.barcode,
                 onPressed: () async {
-                  print(widget._item.barcode.padLeft(13,'0'));
+                  print(widget._item.barcode.padLeft(13, '0'));
                   print(widget._item.barcode.length);
                 },
               ),
@@ -59,6 +62,9 @@ class _DetailsItemPageState extends State<DetailsItemPage> {
                 onTapEdit: () async {
                   widget._item = (await Modular.to.pushNamed<ItemModel>("/home", arguments: widget._item))!;
                   setState(() {});
+                },
+                onTapShare: () {
+                  controller.shareItem(item: widget._item);
                 },
               ),
             ],
