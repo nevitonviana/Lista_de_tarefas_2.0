@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../ui/extensions/size_screen_extension.dart';
-import '../ui/extensions/theme_extension.dart';
+import '../extensions/size_screen_extension.dart';
+import '../extensions/theme_extension.dart';
+
+
 
 class CustomButton extends StatelessWidget {
   final String label;

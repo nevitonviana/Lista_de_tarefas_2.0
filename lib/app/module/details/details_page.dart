@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../core/life_cycle/page_life_cycle_state.dart';
 import '../../core/ui/extensions/size_screen_extension.dart';
+import '../../core/ui/widgets/format_date.dart';
 import '../../models/item_model.dart';
 import 'details_controller.dart';
 import 'widgets/custom_dismissible.dart';

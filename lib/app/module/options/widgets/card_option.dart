@@ -25,7 +25,7 @@ class _CardOption extends StatelessWidget {
         color: Colors.grey[400],
         child: Container(
           padding: const EdgeInsets.all(20),
-          height: 65.h,
+          height: 70.h,
           child: Row(
             children: [
               Text(
@@ -35,7 +35,7 @@ class _CardOption extends StatelessWidget {
               const Spacer(),
               Icon(
                 icon,
-                size: 20,
+                size: 25,
               ),
             ],
           ),

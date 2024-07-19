@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/widgets/custom_button.dart';
-import '../../../core/widgets/custom_text_form_field.dart';
+import '../../../core/ui/widgets/custom_button.dart';
+import '../../../core/ui/widgets/custom_text_form_field.dart';
 
 class DialogSearch {
   final BuildContext _context;

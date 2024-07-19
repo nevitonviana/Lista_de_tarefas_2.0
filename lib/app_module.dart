@@ -1,7 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
-
-import 'app/barcode/barcode_scanner/barcode_scanner.dart';
-import 'app/barcode/barcode_scanner/barcode_scanner_impl.dart';
+import 'app/core/barcode/barcode_scanner/barcode_scanner.dart';
+import 'app/core/barcode/barcode_scanner/barcode_scanner_impl.dart';
 import 'app/core/database/sqlite_connection_factory.dart';
 import 'app/core/logger/app_logger.dart';
 import 'app/core/logger/logger_app_logger_impl.dart';

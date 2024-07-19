@@ -3,7 +3,7 @@ import 'package:mobx/mobx.dart';
 import '../../../core/life_cycle/controller_life_cycle.dart';
 import '../../../core/logger/app_logger.dart';
 import '../../../core/shara/flutter_share_app.dart';
-import '../../../core/widgets/messages.dart';
+import '../../../core/ui/widgets/messages.dart';
 import '../../../models/item_model.dart';
 
 part 'details_item_controller.g.dart';

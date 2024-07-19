@@ -1,11 +1,11 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../barcode/barcode_scanner/barcode_scanner.dart';
+import '../../core/barcode/barcode_scanner/barcode_scanner.dart';
 import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/logger/app_logger.dart';
-import '../../core/widgets/loader.dart';
-import '../../core/widgets/messages.dart';
+import '../../core/ui/widgets/loader.dart';
+import '../../core/ui/widgets/messages.dart';
 import '../../models/item_model.dart';
 import '../../services/sql/sqflite_service.dart';
 

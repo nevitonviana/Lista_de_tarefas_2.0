@@ -4,56 +4,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/ui/extensions/theme_extension.dart';
-import '../../../core/widgets/messages.dart';
+import '../../../core/ui/widgets/format_date.dart';
+import '../../../core/ui/widgets/messages.dart';
 import '../home_controller.dart';
-
-// class CalendarButton extends StatelessWidget {
-//   final FormFieldValidator<String>? validator;
-//   final TextEditingController? controller;
-//   final dateFormat = DateFormat('dd/MM/y');
-//   var ttt;
-//
-//   CalendarButton({
-//     super.key,
-//     this.validator,
-//     required this.controller,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return TextFormField(
-//       validator: validator,
-//       controller: controller,
-//       onTap: () async {
-//         var lastDate = DateTime.now();
-//         lastDate = lastDate.add(const Duration(days: 10 * 365));
-//         // var data
-//         ttt = await showDatePicker(
-//           initialDate: DateTime.now(),
-//           context: context,
-//           firstDate: DateTime(2000),
-//           lastDate: lastDate,
-//         );
-//         controller?.value = ttt;
-//         // controller?.text = dateFormat.format(data!);
-//       },
-//       readOnly: true,
-//       decoration: InputDecoration(
-//         // enabledBorder: InputBorder.none,
-//         border: OutlineInputBorder(
-//           borderRadius: BorderRadius.circular(30),
-//         ),
-//         focusedBorder: const OutlineInputBorder(
-//           borderRadius: BorderRadius.all(Radius.circular(30)),
-//           borderSide: BorderSide(color: Colors.grey),
-//         ),
-//         prefixIcon: const Icon(Icons.calendar_month_sharp),
-//         hintText: ttt ?? "SELECIONE UMA DATA ",
-//         hintStyle: TextStyle(fontSize: 13.tx),
-//       ),
-//     );
-//   }
-// }
 
 class CalendarButton2 extends StatelessWidget {
   final FocusNode? focusNode;
@@ -106,9 +59,7 @@ class CalendarButton2 extends StatelessWidget {
               builder: (_) {
                 if (controller.selectedDateTime != null) {
                   return Text(
-                    dateFormat.format(
-                      controller.selectedDateTime!,
-                    ),
+                    FormatDate.dateFormat(controller.selectedDateTime!.toIso8601String()),
                     style: context.titleStyle,
                   );
                 } else {

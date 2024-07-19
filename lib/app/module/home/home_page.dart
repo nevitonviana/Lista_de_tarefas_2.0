@@ -1,4 +1,3 @@
-import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -6,8 +5,8 @@ import 'package:validatorless/validatorless.dart';
 
 import '../../core/life_cycle/page_life_cycle_state.dart';
 import '../../core/ui/extensions/size_screen_extension.dart';
-import '../../core/widgets/custom_button.dart';
-import '../../core/widgets/custom_text_form_field.dart';
+import '../../core/ui/widgets/custom_button.dart';
+import '../../core/ui/widgets/custom_text_form_field.dart';
 import '../../models/item_model.dart';
 import '../../models/list_options_enum.dart';
 import 'home_controller.dart';

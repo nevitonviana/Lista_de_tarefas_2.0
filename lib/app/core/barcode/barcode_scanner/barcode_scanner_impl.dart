@@ -1,7 +1,8 @@
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-import '../../core/exception/failure.dart';
-import '../../core/logger/app_logger.dart';
+import '../../exception/failure.dart';
+import '../../logger/app_logger.dart';
+
 import 'barcode_scanner.dart';
 
 class BarcodeScannerImpl implements BarcodeScanner {

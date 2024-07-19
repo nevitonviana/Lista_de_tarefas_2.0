@@ -2,17 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_share/flutter_share.dart';
 
 import '../../../core/life_cycle/page_life_cycle_state.dart';
 import '../../../core/ui/extensions/size_screen_extension.dart';
-import '../../../core/widgets/messages.dart';
+import '../../../core/ui/widgets/format_date.dart';
+import '../../../core/ui/widgets/messages.dart';
 import '../../../models/item_model.dart';
 import 'details_item_controller.dart';
 import 'widgets/show_barcode.dart';
 
 part 'widgets/buttons_widget.dart';
-
 part 'widgets/label_widget.dart';
 
 // ignore: must_be_immutable
@@ -32,16 +31,26 @@ class _DetailsItemPageState extends PageLifeCycleState<DetailsItemController, De
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text(
+          "Informação do Produto",
+        ),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: .05.sh),
+          padding: EdgeInsets.only(top: .06.sh),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _LabelWidget(label: "Name", nameItem: widget._item.name),
-              _LabelWidget(label: "Data do Vencimento", nameItem: widget._item.date.toString()),
+              _LabelWidget(
+                label: "Data do Vencimento",
+                nameItem: FormatDate.dateFormat(
+                  widget._item.date.toIso8601String(),
+                ),
+              ),
               _LabelWidget(
                 label: "Codigo Do Produto",
                 nameItem: widget._item.barcode,

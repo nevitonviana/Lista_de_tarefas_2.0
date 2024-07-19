@@ -22,6 +22,8 @@ class DetailsItemModule extends Module {
       child: (context) => DetailsItemPage(
         item: r.args.data,
       ),
+      transition: TransitionType.leftToRightWithFade
+      // transition: TransitionType.scale
     );
   }
 }
