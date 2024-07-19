@@ -4,7 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/ui/extensions/theme_extension.dart';
-import '../../../core/ui/widgets/format_date.dart';
+import '../../../core/ui/widgets/date.dart';
 import '../../../core/ui/widgets/messages.dart';
 import '../home_controller.dart';
 
@@ -59,7 +59,7 @@ class CalendarButton2 extends StatelessWidget {
               builder: (_) {
                 if (controller.selectedDateTime != null) {
                   return Text(
-                    FormatDate.dateFormat(controller.selectedDateTime!.toIso8601String()),
+                    Date.format(controller.selectedDateTime!),
                     style: context.titleStyle,
                   );
                 } else {

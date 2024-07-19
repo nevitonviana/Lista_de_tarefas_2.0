@@ -5,7 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../core/life_cycle/page_life_cycle_state.dart';
 import '../../../core/ui/extensions/size_screen_extension.dart';
-import '../../../core/ui/widgets/format_date.dart';
+import '../../../core/ui/widgets/date.dart';
 import '../../../core/ui/widgets/messages.dart';
 import '../../../models/item_model.dart';
 import 'details_item_controller.dart';
@@ -47,8 +47,8 @@ class _DetailsItemPageState extends PageLifeCycleState<DetailsItemController, De
               _LabelWidget(label: "Name", nameItem: widget._item.name),
               _LabelWidget(
                 label: "Data do Vencimento",
-                nameItem: FormatDate.dateFormat(
-                  widget._item.date.toIso8601String(),
+                nameItem: Date.format(
+                  widget._item.date,
                 ),
               ),
               _LabelWidget(
