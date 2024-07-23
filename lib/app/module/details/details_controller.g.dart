@@ -25,6 +25,30 @@ mixin _$DetailsController on DetailsControllerBase, Store {
     });
   }
 
+  late final _$daysSelectedForExpirationAtom = Atom(
+      name: 'DetailsControllerBase.daysSelectedForExpiration',
+      context: context);
+
+  @override
+  int get daysSelectedForExpiration {
+    _$daysSelectedForExpirationAtom.reportRead();
+    return super.daysSelectedForExpiration;
+  }
+
+  bool _daysSelectedForExpirationIsInitialized = false;
+
+  @override
+  set daysSelectedForExpiration(int value) {
+    _$daysSelectedForExpirationAtom.reportWrite(
+        value,
+        _daysSelectedForExpirationIsInitialized
+            ? super.daysSelectedForExpiration
+            : null, () {
+      super.daysSelectedForExpiration = value;
+      _daysSelectedForExpirationIsInitialized = true;
+    });
+  }
+
   late final _$getItemsAsyncAction =
       AsyncAction('DetailsControllerBase.getItems', context: context);
 
@@ -58,7 +82,8 @@ mixin _$DetailsController on DetailsControllerBase, Store {
   @override
   String toString() {
     return '''
-listItems: ${listItems}
+listItems: ${listItems},
+daysSelectedForExpiration: ${daysSelectedForExpiration}
     ''';
   }
 }

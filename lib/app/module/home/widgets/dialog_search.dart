@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../core/ui/widgets/custom_button.dart';
 import '../../../core/ui/widgets/custom_text_form_field.dart';
+import '../home_controller.dart';
 
-class DialogSearch {
+class DialogCustom {
   final BuildContext _context;
 
-  DialogSearch({required BuildContext context}) : _context = context;
+  DialogCustom({required BuildContext context}) : _context = context;
 
   showSearch(
       {required TextEditingController controller,
@@ -40,6 +41,53 @@ class DialogSearch {
               onPressed.call();
             },
           ),
+        ],
+      ),
+    );
+  }
+
+  showSelectDueDate({
+    required TextEditingController controller,
+    required VoidCallback onPressed,
+    required HomeController homeController,
+  }) {
+    showDialog(
+      context: _context,
+      builder: (context) => AlertDialog(
+        title: const ListTile(
+          title: Text(
+            "Seleciona dia de evencimento",
+            style: TextStyle(fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+          subtitle: Text(
+            "selecionar os dias para avisa quantos dias falta para o  vencimento do produto exemple(5 dias para o vencimento ). sera mostrado de amarelo na seçao de rebaixa",
+            style: TextStyle(fontSize: 13),
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Dias selecionado ( ${homeController.daysSelectedForExpiration} )"),
+            CustomTextFormField(controller: controller, label: "Dias"),
+          ],
+        ),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            label: const Text("Cancelar"),
+            icon: const Icon(Icons.cancel_outlined),
+          ),
+          TextButton.icon(
+            onPressed: () async {
+              onPressed.call();
+              Navigator.pop(context);
+            },
+            label: const Text("salvar"),
+            icon: const Icon(Icons.save),
+          )
         ],
       ),
     );

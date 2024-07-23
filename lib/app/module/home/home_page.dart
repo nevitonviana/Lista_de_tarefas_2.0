@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:validatorless/validatorless.dart';
@@ -7,11 +9,14 @@ import '../../core/life_cycle/page_life_cycle_state.dart';
 import '../../core/ui/extensions/size_screen_extension.dart';
 import '../../core/ui/widgets/custom_button.dart';
 import '../../core/ui/widgets/custom_text_form_field.dart';
+import '../../core/ui/widgets/messages.dart';
 import '../../models/item_model.dart';
 import '../../models/list_options_enum.dart';
 import 'home_controller.dart';
 import 'widgets/calendar_button.dart';
 import 'widgets/dialog_search.dart';
+
+part 'widgets/drawer_custom.dart';
 
 class HomePage extends StatefulWidget {
   final ItemModel? _item;
@@ -68,6 +73,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: _DrawerCustom(controller: controller,),
       appBar: AppBar(
         title: const Text('Home'),
         actions: [
@@ -75,7 +81,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
             padding: const EdgeInsets.only(right: 5),
             child: IconButton(
               onPressed: () {
-                DialogSearch(context: context).showSearch(
+                DialogCustom(context: context).showSearch(
                   onPressedIcon: () async => _nameEC.text = await controller.barcodeScanner(),
                   controller: _nameEC,
                   onPressed: () async {

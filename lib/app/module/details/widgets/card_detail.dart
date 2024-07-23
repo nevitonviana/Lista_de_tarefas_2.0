@@ -5,12 +5,13 @@ class _CardDetail extends StatelessWidget {
   final DateTime date;
   final bool isIndicatorByColor;
   final VoidCallback onTap;
+  final int daysForExpiration;
 
   const _CardDetail({
     required this.name,
     required this.date,
     required this.onTap,
-    this.isIndicatorByColor = false,
+    this.isIndicatorByColor = false, required this.daysForExpiration,
   });
 
   @override
@@ -18,7 +19,7 @@ class _CardDetail extends StatelessWidget {
     return GestureDetector(
         onTap: onTap,
         child: Card(
-          color: isIndicatorByColor ? Date.indicatorByColor(date) : Colors.white70,
+          color: isIndicatorByColor ? Date.indicatorByColor(date: date, daysForExpiration:daysForExpiration ) : Colors.white70,
           margin: const EdgeInsets.only(top: 15),
           elevation: 5,
           clipBehavior: Clip.antiAlias,

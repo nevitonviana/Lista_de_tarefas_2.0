@@ -100,6 +100,7 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                           name: item.name,
                           date: item.date,
                           isIndicatorByColor: item.options == ListOptionsEnum.Rebaixar.name,
+                          daysForExpiration: controller.daysSelectedForExpiration ,
                         ),
                       ),
                     );

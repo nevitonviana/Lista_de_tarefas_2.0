@@ -1,8 +1,9 @@
 import 'package:mobx/mobx.dart';
 
+import '../../core/helpers/constants.dart';
 import '../../core/life_cycle/controller_life_cycle.dart';
+import '../../core/local_storage/local_storage.dart';
 import '../../core/logger/app_logger.dart';
-
 
 import '../../core/ui/widgets/loader.dart';
 import '../../core/ui/widgets/messages.dart';
@@ -16,13 +17,13 @@ class DetailsController = DetailsControllerBase with _$DetailsController;
 abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   final SqfliteService _service;
   final AppLogger _log;
+  final LocalStorage _storage;
 
-  @observable
-  ObservableList<ItemModel> listItems = ObservableList<ItemModel>();
-
-  DetailsControllerBase({required SqfliteService service, required AppLogger log})
+  DetailsControllerBase(
+      {required SqfliteService service, required AppLogger log, required LocalStorage storage})
       : _service = service,
-        _log = log;
+        _log = log,
+        _storage = storage;
 
   @override
   Future<void> onInit([Map<String, dynamic>? params]) async {
@@ -31,7 +32,14 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     } else {
       searchItemNameOrBarcode(search: params?['searchItem'] ?? '');
     }
+    getDaysSelectedForExpiration();
   }
+
+  @observable
+  ObservableList<ItemModel> listItems = ObservableList<ItemModel>();
+
+  @observable
+  late int daysSelectedForExpiration;
 
   @action
   Future<void> getItems(String name) async {
@@ -82,6 +90,22 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     } catch (e, s) {
       _log.error("Erro ao buscar itens no banco de Dadods", e, s);
       Messages.alert("Erro ao buacar dados ");
+    }
+  }
+
+  Future<void> getDaysSelectedForExpiration() async {
+    try {
+      Loader.show();
+      daysSelectedForExpiration =
+          int.tryParse(await _storage.read(Constants.Days_Selected_For_Expiration)) ?? 10;
+    } catch (e, s) {
+      _log.error("Erro ao buscar o dias ", e, s);
+      daysSelectedForExpiration = 10;
+      Messages.alert("Erro ao buscar o dias ");
+    } finally {
+      Loader.hide();
+      print("------------");
+      print(daysSelectedForExpiration);
     }
   }
 }

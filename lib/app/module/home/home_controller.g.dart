@@ -41,6 +41,23 @@ mixin _$HomeController on HomeControllerBase, Store {
     });
   }
 
+  late final _$daysSelectedForExpirationAtom = Atom(
+      name: 'HomeControllerBase.daysSelectedForExpiration', context: context);
+
+  @override
+  String? get daysSelectedForExpiration {
+    _$daysSelectedForExpirationAtom.reportRead();
+    return super.daysSelectedForExpiration;
+  }
+
+  @override
+  set daysSelectedForExpiration(String? value) {
+    _$daysSelectedForExpirationAtom
+        .reportWrite(value, super.daysSelectedForExpiration, () {
+      super.daysSelectedForExpiration = value;
+    });
+  }
+
   late final _$updateItemAsyncAction =
       AsyncAction('HomeControllerBase.updateItem', context: context);
 
@@ -49,11 +66,20 @@ mixin _$HomeController on HomeControllerBase, Store {
     return _$updateItemAsyncAction.run(() => super.updateItem(item: item));
   }
 
+  late final _$barcodeScannerAsyncAction =
+      AsyncAction('HomeControllerBase.barcodeScanner', context: context);
+
+  @override
+  Future<String> barcodeScanner() {
+    return _$barcodeScannerAsyncAction.run(() => super.barcodeScanner());
+  }
+
   @override
   String toString() {
     return '''
 selectedDateTime: ${selectedDateTime},
-selectedOption: ${selectedOption}
+selectedOption: ${selectedOption},
+daysSelectedForExpiration: ${daysSelectedForExpiration}
     ''';
   }
 }
