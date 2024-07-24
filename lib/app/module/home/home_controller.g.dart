@@ -8,9 +8,9 @@ part of 'home_controller.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$HomeController on HomeControllerBase, Store {
+mixin _$HomeController on _HomeControllerBase, Store {
   late final _$selectedDateTimeAtom =
-      Atom(name: 'HomeControllerBase.selectedDateTime', context: context);
+      Atom(name: '_HomeControllerBase.selectedDateTime', context: context);
 
   @override
   DateTime? get selectedDateTime {
@@ -26,7 +26,7 @@ mixin _$HomeController on HomeControllerBase, Store {
   }
 
   late final _$selectedOptionAtom =
-      Atom(name: 'HomeControllerBase.selectedOption', context: context);
+      Atom(name: '_HomeControllerBase.selectedOption', context: context);
 
   @override
   String? get selectedOption {
@@ -42,7 +42,7 @@ mixin _$HomeController on HomeControllerBase, Store {
   }
 
   late final _$daysSelectedForExpirationAtom = Atom(
-      name: 'HomeControllerBase.daysSelectedForExpiration', context: context);
+      name: '_HomeControllerBase.daysSelectedForExpiration', context: context);
 
   @override
   String? get daysSelectedForExpiration {
@@ -59,7 +59,7 @@ mixin _$HomeController on HomeControllerBase, Store {
   }
 
   late final _$updateItemAsyncAction =
-      AsyncAction('HomeControllerBase.updateItem', context: context);
+      AsyncAction('_HomeControllerBase.updateItem', context: context);
 
   @override
   Future<void> updateItem({required ItemModel item}) {
@@ -67,7 +67,7 @@ mixin _$HomeController on HomeControllerBase, Store {
   }
 
   late final _$barcodeScannerAsyncAction =
-      AsyncAction('HomeControllerBase.barcodeScanner', context: context);
+      AsyncAction('_HomeControllerBase.barcodeScanner', context: context);
 
   @override
   Future<String> barcodeScanner() {

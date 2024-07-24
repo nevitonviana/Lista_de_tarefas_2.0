@@ -56,7 +56,7 @@ class DialogCustom {
       builder: (context) => AlertDialog(
         title: const ListTile(
           title: Text(
-            "Seleciona dia de evencimento",
+            "Seleciona dia de vencimento",
             style: TextStyle(fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -65,12 +65,18 @@ class DialogCustom {
             style: TextStyle(fontSize: 13),
           ),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Dias selecionado ( ${homeController.daysSelectedForExpiration} )"),
-            CustomTextFormField(controller: controller, label: "Dias"),
-          ],
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Dias selecionado ( ${homeController.daysSelectedForExpiration} )"),
+              CustomTextFormField(
+                controller: controller,
+                label: "Dias",
+                textInputType: TextInputType.number,
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton.icon(

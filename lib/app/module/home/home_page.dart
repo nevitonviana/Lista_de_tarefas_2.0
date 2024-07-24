@@ -70,10 +70,13 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
     _updateItem();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: _DrawerCustom(controller: controller,),
+      drawer: _DrawerCustom(
+        controller: controller,
+      ),
       appBar: AppBar(
         title: const Text('Home'),
         actions: [

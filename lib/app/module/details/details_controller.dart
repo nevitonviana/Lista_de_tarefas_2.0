@@ -32,6 +32,11 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     } else {
       searchItemNameOrBarcode(search: params?['searchItem'] ?? '');
     }
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
     getDaysSelectedForExpiration();
   }
 
@@ -100,12 +105,9 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
           int.tryParse(await _storage.read(Constants.Days_Selected_For_Expiration)) ?? 10;
     } catch (e, s) {
       _log.error("Erro ao buscar o dias ", e, s);
-      daysSelectedForExpiration = 10;
       Messages.alert("Erro ao buscar o dias ");
     } finally {
       Loader.hide();
-      print("------------");
-      print(daysSelectedForExpiration);
     }
   }
 }
