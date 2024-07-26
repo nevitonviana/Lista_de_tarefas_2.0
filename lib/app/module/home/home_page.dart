@@ -121,10 +121,12 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                   label: "Codigo",
                   icon: Icons.integration_instructions_sharp,
                   validator: Validatorless.required("Campo Obrigatorio"),
+                  suffixIcon: const Icon(Icons.barcode_reader),
                 ),
                 CustomTextFormField(
                   controller: _quantityEC,
                   label: "Quantidade/Kg",
+                  textInputType: const TextInputType.numberWithOptions(decimal: true,signed: false ),
                   icon: Icons.numbers_sharp,
                 ),
                 Observer(
@@ -133,6 +135,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                     return Visibility(
                       visible: controller.selectedOption == ListOptionsEnum.Outros.name,
                       child: CustomTextFormField(
+                        textInputType: TextInputType.multiline,
                         controller: _descriptionEC,
                         label: "Observações",
                         icon: Icons.description_rounded,
@@ -143,20 +146,21 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CalendarButton2(
+                      CalendarButton(
                         focusNode: _focusNode,
                       ),
-                      Expanded(
+                      SizedBox(
+                        width: 130.w,
                         child: Observer(builder: (_) {
                           return DropdownButtonFormField(
+                            iconSize: 30,
+                            padding: const EdgeInsets.only(left: 10),
                             value: controller.selectedOption,
-                            validator: Validatorless.required("Campo Obrigatorio"),
+                            validator: Validatorless.required('Campo Obrigatorio'),
                             alignment: Alignment.center,
-                            hint: const Text("Opições"),
+                            hint: const Text('Opições',textAlign: TextAlign.center,),
                             onChanged: (value) => controller.selectedOption = value,
                             items: ListOptionsEnum.values
                                 .map<DropdownMenuItem<String>>(
@@ -172,9 +176,11 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 10),
                 CustomButton(
                   label: "Escaniar",
                   icon: Icons.camera_enhance_outlined,
+                  widget: 60,
                   onPressed: () async {
                     _barcodeEC.text = await controller.barcodeScanner();
                   },

@@ -9,9 +9,14 @@ extension ThemeExtension on BuildContext {
 
   TextTheme get textTheme => Theme.of(this).textTheme;
 
-  TextStyle get titleStyle => const TextStyle(
+  TextStyle get titleStyleSmaller => const TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.bold,
         color: Colors.black45,
       );
+  TextStyle get titleStyleMedium => const TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+    color: Colors.black45,
+  );
 }

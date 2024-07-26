@@ -20,7 +20,8 @@ class CustomTextFormField extends StatelessWidget {
       this.icon,
       this.horizontalSize = 0,
       this.textInputType = TextInputType.text,
-      this.validator, this.suffixIcon});
+      this.validator,
+      this.suffixIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +29,7 @@ class CustomTextFormField extends StatelessWidget {
       // margin: const EdgeInsets.symmetric(vertical: 10),
       padding: EdgeInsets.symmetric(horizontal: horizontalSize, vertical: 10),
       child: TextFormField(
+        maxLines: null,
         controller: controller,
         focusNode: focusNode,
         initialValue: initialValue,

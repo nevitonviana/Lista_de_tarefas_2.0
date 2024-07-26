@@ -8,11 +8,11 @@ import '../../../core/ui/widgets/date.dart';
 import '../../../core/ui/widgets/messages.dart';
 import '../home_controller.dart';
 
-class CalendarButton2 extends StatelessWidget {
+class CalendarButton extends StatelessWidget {
   final FocusNode? focusNode;
   final dateFormat = DateFormat('dd/MM/y');
 
-  CalendarButton2({super.key, this.focusNode});
+  CalendarButton({super.key, this.focusNode});
 
   final controller = Modular.get<HomeController>();
 
@@ -60,12 +60,12 @@ class CalendarButton2 extends StatelessWidget {
                 if (controller.selectedDateTime != null) {
                   return Text(
                     Date.format(controller.selectedDateTime!),
-                    style: context.titleStyle,
+                    style: context.titleStyleMedium,
                   );
                 } else {
                   return Text(
                     "SELECIONE UMA DATA ",
-                    style: context.titleStyle,
+                    style: context.titleStyleSmaller,
                   );
                 }
               },
