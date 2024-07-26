@@ -13,6 +13,7 @@ import '../../services/sql/sqflite_service.dart';
 
 part 'home_controller.g.dart';
 
+// ignore: library_private_types_in_public_api
 class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store, ControllerLifeCycle {
@@ -110,7 +111,7 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
   Future<void> getDaysSelectedForExpiration() async {
     try {
       Loader.show();
-      daysSelectedForExpiration = await _storage.read<String>(Constants.Days_Selected_For_Expiration) ?? '10';
+      daysSelectedForExpiration = await _storage.read<String>(Constants.Days_Selected_For_Expiration);
     } catch (e, s) {
       _log.error("Erro ao buscar o dias ", e, s);
       Messages.alert("Erro ao buscar o dias ");

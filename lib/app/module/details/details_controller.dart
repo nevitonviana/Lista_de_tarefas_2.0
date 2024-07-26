@@ -49,10 +49,8 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   @action
   Future<void> getItems(String name) async {
     try {
-      // Loader.show();
       final result = await _service.getItemOption(name);
       listItems = result.asObservable();
-      // Loader.hide();
     } catch (e, s) {
       _log.error("Erro ao busca os itens", e, s);
       Messages.warning("erro ao busca os itens");
@@ -67,7 +65,6 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
       listItems.removeWhere((item) => item.id == id);
       Loader.hide();
     } catch (e, s) {
-      // MobXException("asasas");
       _log.error("erro ao deleta o item", e, s);
       Messages.alert("Erro ao deleta o item");
     }
@@ -88,10 +85,10 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
 
   Future<void> searchItemNameOrBarcode({required String search}) async {
     try {
-      // Loader.show();
+      Loader.show();
       final result = await _service.searchItemBarcodeOrName(search);
       listItems = result.asObservable();
-      // Loader.hide();
+      Loader.hide();
     } catch (e, s) {
       _log.error("Erro ao buscar itens no banco de Dadods", e, s);
       Messages.alert("Erro ao buacar dados ");

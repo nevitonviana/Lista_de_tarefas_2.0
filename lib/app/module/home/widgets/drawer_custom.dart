@@ -3,7 +3,7 @@ part of '../home_page.dart';
 class _DrawerCustom extends StatefulWidget {
   final HomeController controller;
 
-  _DrawerCustom({required this.controller});
+  const _DrawerCustom({required this.controller});
 
   @override
   State<_DrawerCustom> createState() => _DrawerCustomState();
@@ -52,7 +52,7 @@ class _DrawerCustomState extends State<_DrawerCustom> {
                     DialogCustom(context: context).showSelectDueDate(
                       onPressed: () {
                         if (_selectDay.text.isNotEmpty) {
-                          widget.controller.daysSelectedForExpiration = _selectDay.text;
+                          widget.controller.saveDaysSelectedForExpiration(days: _selectDay.text);
                           _selectDay.clear();
                           Navigator.pop(context);
                         } else {

@@ -9,7 +9,6 @@ class Date {
     try {
       return format.format(date);
     } catch (e) {
-      print(e);
       return "";
     }
   }
