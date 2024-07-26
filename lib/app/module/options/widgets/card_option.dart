@@ -16,7 +16,7 @@ class _CardOption extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Card(
-        margin: const EdgeInsets.only(top: 15),
+        margin: const EdgeInsets.only(top: 20),
         shape: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: const BorderSide(width: 2),
@@ -24,13 +24,14 @@ class _CardOption extends StatelessWidget {
         elevation: 5,
         color: Colors.grey[400],
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           height: 70.h,
           child: Row(
             children: [
               Text(
                 label,
                 style: TextStyle(fontSize: 18.tx),
+                textAlign: TextAlign.center,
               ),
               const Spacer(),
               Icon(

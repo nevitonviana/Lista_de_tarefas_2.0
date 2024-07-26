@@ -16,7 +16,7 @@ class OptionsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: Container(
-        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * .2, right: sizeRL, left: sizeRL),
+        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * .16, right: sizeRL, left: sizeRL),
         child: ListView(
           children: ListOptionsEnum.values
               .map(
