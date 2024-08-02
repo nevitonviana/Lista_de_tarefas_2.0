@@ -25,4 +25,15 @@ class Date {
       return Colors.white70;
     }
   }
+
+  static checkDate({required DateTime date, required int daysForExpiration}) {
+    if (date.toIso8601String().isNotEmpty) {
+      final dataDifference = DateTime.now().add(const Duration(days: -1)).difference(date).inDays;
+      if (dataDifference >= 0) {
+        return 'vencido';
+      } else if (dataDifference >= -daysForExpiration) {
+        return 'rebaixar';
+      }
+    }
+  }
 }

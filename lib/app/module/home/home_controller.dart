@@ -6,9 +6,12 @@ import '../../core/helpers/constants.dart';
 import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/local_storage/local_storage.dart';
 import '../../core/logger/app_logger.dart';
+import '../../core/notification_service/notification_service.dart';
+import '../../core/ui/widgets/date.dart';
 import '../../core/ui/widgets/loader.dart';
 import '../../core/ui/widgets/messages.dart';
 import '../../models/item_model.dart';
+import '../../models/notification_model.dart';
 import '../../services/sql/sqflite_service.dart';
 
 part 'home_controller.g.dart';
@@ -20,24 +23,27 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
   final SqfliteService _service;
   final AppLogger _log;
   final BarcodeScanner _scanner;
+
   final LocalStorage _storage;
 
-  _HomeControllerBase(
-      {required SqfliteService service,
-      required AppLogger log,
-      required BarcodeScanner scanner,
-      required LocalStorage storage})
-      : _service = service,
+  final NotificationService _notificationService;
+
+  _HomeControllerBase({
+    required SqfliteService service,
+    required AppLogger log,
+    required BarcodeScanner scanner,
+    required LocalStorage storage,
+    required NotificationService notificationService,
+  })  : _service = service,
         _log = log,
         _scanner = scanner,
-        _storage = storage;
-
-
-
+        _storage = storage,
+        _notificationService = notificationService;
 
   @override
   void onReady() {
     getDaysSelectedForExpiration();
+    _showNotificationForExpiredAndForDowngrading();
   }
 
   @observable
@@ -128,6 +134,27 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
     } catch (e, s) {
       _log.error("Erro ao salva os dias para o vencimento", e, s);
       Messages.alert("Erro ao salva os dias para o vencimento");
+    }
+  }
+
+  Future<void> _showNotificationForExpiredAndForDowngrading() async {
+    try {
+      final result = await _service.getItemAndCheckValidity();
+      result.map(
+        (e) {
+          var resultCheck = Date.checkDate(date: e.date, daysForExpiration: 10);
+          if (resultCheck == 'rebaixar') {
+            _notificationService.showNotification(
+                NotificationModel(id: e.id!, title: "Rebaixar de produto", body: e.name, payload: "payload"));
+          } else if (resultCheck == "vencido") {
+            _notificationService.showNotification(NotificationModel(
+                id: e.id!, title: "Produto Vencido na Loja", body: e.name, payload: "payload"));
+          }
+        },
+      ).toList();
+    } catch (e, s) {
+      _log.error("Erro ao mostar as Notificações dos itens", e, s);
+      Messages.info("Erro ao mostar as Notificações dos itens");
     }
   }
 }

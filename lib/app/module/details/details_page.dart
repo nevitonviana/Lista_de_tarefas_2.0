@@ -40,27 +40,29 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
         title: Text(widget._name ?? "Resultados"),
         centerTitle: true,
         actions: [
-          Observer(builder: (context) {
-            return Visibility(
-              visible: controller.listItems.isNotEmpty && widget._name != null,
-              child: IconButton(
-                onPressed: () {
-                  DialogCustom(context).dialogDelete(
-                    onPressedDelete: () {
-                      controller.deleteAllItems(optionOfDeletes: widget._name!);
-                    },
-                    label: ' todos os itens de ${widget._name}',
-                  );
-                },
-                icon: const Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                  opticalSize: 30,
-                  size: 30,
+          Observer(
+            builder: (context) {
+              return Visibility(
+                visible: controller.listItems.isNotEmpty && widget._name != null,
+                child: IconButton(
+                  onPressed: () {
+                    DialogCustom(context).dialogDelete(
+                      onPressedDelete: () {
+                        controller.deleteAllItems(optionOfDeletes: widget._name!);
+                      },
+                      label: ' todos os itens de ${widget._name}',
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                    opticalSize: 30,
+                    size: 30,
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ],
       ),
       body: Observer(
@@ -100,7 +102,7 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                           name: item.name,
                           date: item.date,
                           isIndicatorByColor: item.options == ListOptionsEnum.Rebaixar.name,
-                          daysForExpiration: controller.daysSelectedForExpiration ,
+                          daysForExpiration: controller.daysSelectedForExpiration,
                         ),
                       ),
                     );

@@ -6,6 +6,8 @@ import 'app/core/local_storage/local_storage.dart';
 import 'app/core/local_storage/shared_preferences_local_storage_impl.dart';
 import 'app/core/logger/app_logger.dart';
 import 'app/core/logger/logger_app_logger_impl.dart';
+import 'app/core/notification_service/notification_service.dart';
+import 'app/core/notification_service/notification_service_impl.dart';
 import 'app/core/shara/flutter_share_app.dart';
 import 'app/core/shara/flutter_share_app_impl.dart';
 import 'app/module/Start_page/start_page_module.dart';
@@ -27,6 +29,7 @@ class AppModule extends Module {
     i.addLazySingleton<BarcodeScanner>(BarcodeScannerImpl.new);
     i.addLazySingleton<FlutterShareApp>(FlutterShareAppImpl.new);
     i.addLazySingleton<LocalStorage>(SharedPreferencesLocalStorageImpl.new);
+    i.addLazySingleton<NotificationService>(NotificationServiceImpl.new);
   }
 
   @override

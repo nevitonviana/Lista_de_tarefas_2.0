@@ -75,7 +75,7 @@ dependencies:
   flutter_mobx: ^2.2.1+1
   asuka: ^2.2.1
   flutter_screenutil: ^5.9.3
-  logger: ^2.3.0
+  logger: ^2.4.0
   shared_preferences: ^2.2.3
   validatorless: ^1.2.3
   sqflite: ^2.3.3+1
@@ -85,7 +85,7 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   barcode_widget: ^2.0.4
   flutter_share: ^2.0.0
-
+  flutter_local_notifications: ^17.2.1+2
 
 
 dev_dependencies:
