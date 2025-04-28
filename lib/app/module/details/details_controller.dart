@@ -29,12 +29,9 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
 
   @override
   Future<void> onInit([Map<String, dynamic>? params]) async {
-    print(params);
     if (params?['name'] != null) {
-      print('nome');
       await getItems(params?['name']);
     } else {
-      print('iterm');
       searchItemNameOrBarcode(search: params?['searchItem'] ?? '');
     }
   }

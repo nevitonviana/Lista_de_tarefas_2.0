@@ -76,12 +76,13 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
       ),
       appBar: widget._item != null
           ? AppBar(
-              title: Text('Editar'),
+              title: const Text('Editar'),
               centerTitle: true,
-              leading: BackButton(),
+              leading: const BackButton(),
             )
           : AppBar(
               title: const Text('Home'),
+              centerTitle: true,
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 5),
@@ -125,7 +126,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                 CustomTextFormField(
                   controller: _barcodeEC,
                   textInputType: TextInputType.number,
-                  label: "Codigo",
+                  label: "Código",
                   icon: Icons.integration_instructions_sharp,
                   validator: Validatorless.required("Campo Obrigatorio"),
                 ),
@@ -191,7 +192,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                 ),
                 const SizedBox(height: 10),
                 CustomButton(
-                  label: "Escaniar",
+                  label: "Escanear",
                   icon: Icons.camera_enhance_outlined,
                   widget: 60,
                   onPressed: () async {

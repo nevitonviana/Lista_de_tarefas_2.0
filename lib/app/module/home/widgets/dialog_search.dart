@@ -74,7 +74,7 @@ class DialogCustom {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                    "Dias selecionado ( ${day} ${homeController.daysSelectedForExpiration != null ? ' Dias' : ''})"),
+                    "Dias selecionado ( $day ${homeController.daysSelectedForExpiration != null ? ' Dias' : ''})"),
                 CustomTextFormField(
                   controller: controller,
                   label: "Dias",

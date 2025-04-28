@@ -24,7 +24,7 @@ class SqfliteServiceImpl implements SqfliteService {
   Future<List<ItemModel>> getItemAndCheckValidity() async {
     try {
       List<ItemModel> resultList = [];
-      final result = await getItemOption(ListOptionsEnum.Rebaixar.name);
+      final result = await getItemOption(ListOptionsEnum.Rebaixa.name);
       result.map<ItemModel>(
         (e) {
           var resultCheck = Date.checkDate(date: e.date, daysForExpiration: 10);

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 enum ListOptionsEnum {
-  Rebaixar,
+  Rebaixa,
   Consumo,
-  Quebra,
+  Quebras,
   Transformar,
   Outros,
 }
@@ -11,11 +11,11 @@ enum ListOptionsEnum {
 extension ListOptionsEnumIcons on ListOptionsEnum {
   IconData get icon {
     switch (this) {
-      case ListOptionsEnum.Rebaixar:
+      case ListOptionsEnum.Rebaixa:
         return Icons.paid_rounded;
       case ListOptionsEnum.Consumo:
         return Icons.delete_sharp;
-      case ListOptionsEnum.Quebra:
+      case ListOptionsEnum.Quebras:
         return Icons.dining_outlined;
       case ListOptionsEnum.Transformar:
         return Icons.flip_camera_android_rounded;

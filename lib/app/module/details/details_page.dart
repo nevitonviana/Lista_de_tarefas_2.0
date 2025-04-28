@@ -110,7 +110,7 @@ class _DetailsPageState
                           name: item.name,
                           date: item.date,
                           isIndicatorByColor:
-                              item.options == ListOptionsEnum.Rebaixar.name &&
+                              item.options == ListOptionsEnum.Rebaixa.name &&
                                   widget._searchItem == null,
                           daysForExpiration:
                               controller.daysSelectedForExpiration,

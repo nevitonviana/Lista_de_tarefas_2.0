@@ -16,6 +16,7 @@ class FlutterShareAppImpl implements FlutterShareApp {
     try {
       SharePlus.instance.share(
         ShareParams(
+          ///TODO ver como ficsa no whatsapp
           text: '''
          - Nome:  \t ${item.name} 
          - Codigo:\t ${item.barcode} 
