@@ -20,7 +20,7 @@ class DialogCustom {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text("Produrar Itens "),
+            const Text("Procurar Itens "),
             IconButton(
                 onPressed: () {
                   Navigator.of(_context).pop();
@@ -31,7 +31,8 @@ class DialogCustom {
         content: CustomTextFormField(
           controller: controller,
           label: "Nome / Codigo",
-          suffixIcon: IconButton(onPressed: onPressedIcon, icon: const Icon(Icons.barcode_reader)),
+          suffixIcon: IconButton(
+              onPressed: onPressedIcon, icon: const Icon(Icons.barcode_reader)),
         ),
         actions: [
           CustomButton(
@@ -53,49 +54,54 @@ class DialogCustom {
   }) {
     showDialog(
       context: _context,
-      builder: (context) => AlertDialog(
-        title: const ListTile(
-          title: Text(
-            "Seleciona dia de vencimento",
-            style: TextStyle(fontSize: 18),
-            textAlign: TextAlign.center,
+      builder: (context) {
+        String day =
+            homeController.daysSelectedForExpiration ?? 'Não Informada';
+        return AlertDialog(
+          title: const ListTile(
+            title: Text(
+              "Seleciona dia de vencimento",
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            subtitle: Text(
+              "selecionar os dias para avisa quantos dias falta para o  vencimento do produto exemple(5 dias para o vencimento ). sera mostrado de amarelo na seçao de rebaixa",
+              style: TextStyle(fontSize: 13),
+            ),
           ),
-          subtitle: Text(
-            "selecionar os dias para avisa quantos dias falta para o  vencimento do produto exemple(5 dias para o vencimento ). sera mostrado de amarelo na seçao de rebaixa",
-            style: TextStyle(fontSize: 13),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                    "Dias selecionado ( ${day} ${homeController.daysSelectedForExpiration != null ? ' Dias' : ''})"),
+                CustomTextFormField(
+                  controller: controller,
+                  label: "Dias",
+                  textInputType: TextInputType.number,
+                ),
+              ],
+            ),
           ),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Dias selecionado ( ${homeController.daysSelectedForExpiration} )"),
-              CustomTextFormField(
-                controller: controller,
-                label: "Dias",
-                textInputType: TextInputType.number,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton.icon(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            label: const Text("Cancelar"),
-            icon: const Icon(Icons.cancel_outlined),
-          ),
-          TextButton.icon(
-            onPressed: () async {
-              onPressed.call();
-              Navigator.pop(context);
-            },
-            label: const Text("salvar"),
-            icon: const Icon(Icons.save),
-          )
-        ],
-      ),
+          actions: [
+            TextButton.icon(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              label: const Text("Cancelar"),
+              icon: const Icon(Icons.cancel_outlined),
+            ),
+            TextButton.icon(
+              onPressed: () async {
+                onPressed.call();
+                Navigator.pop(context);
+              },
+              label: const Text("salvar"),
+              icon: const Icon(Icons.save),
+            )
+          ],
+        );
+      },
     );
   }
 }

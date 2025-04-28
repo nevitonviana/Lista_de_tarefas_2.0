@@ -28,9 +28,11 @@ class DetailsPage extends StatefulWidget {
   State<DetailsPage> createState() => _DetailsPageState();
 }
 
-class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPage> {
+class _DetailsPageState
+    extends PageLifeCycleState<DetailsController, DetailsPage> {
   @override
-  Map<String, dynamic>? get params => {'name': widget._name, 'searchItem': widget._searchItem};
+  Map<String, dynamic>? get params =>
+      {'name': widget._name, 'searchItem': widget._searchItem};
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +45,14 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
           Observer(
             builder: (context) {
               return Visibility(
-                visible: controller.listItems.isNotEmpty && widget._name != null,
+                visible:
+                    controller.listItems.isNotEmpty && widget._name != null,
                 child: IconButton(
                   onPressed: () {
                     DialogCustom(context).dialogDelete(
                       onPressedDelete: () {
-                        controller.deleteAllItems(optionOfDeletes: widget._name!);
+                        controller.deleteAllItems(
+                            optionOfDeletes: widget._name!);
                       },
                       label: ' todos os itens de ${widget._name}',
                     );
@@ -78,10 +82,12 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                       child: CustomDismissible(
                         confirmDismiss: (direction) async {
                           if (direction == DismissDirection.startToEnd) {
-                            await Modular.to.pushNamed("/home", arguments: item);
+                            await Modular.to
+                                .pushNamed("/home", arguments: item);
                             widget._searchItem == null
                                 ? await controller.getItems(item.options)
-                                : controller.searchItemNameOrBarcode(search: widget._searchItem!);
+                                : controller.searchItemNameOrBarcode(
+                                    search: widget._searchItem!);
                           } else {
                             await DialogCustom(context).dialogDelete(
                               label: item.name,
@@ -94,15 +100,20 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                         },
                         child: _CardDetail(
                           onTap: () async {
-                            await Modular.to.pushNamed('/details/detailsItem', arguments: item);
+                            await Modular.to.pushNamed('/details/detailsItem',
+                                arguments: item);
                             widget._searchItem == null
                                 ? await controller.getItems(item.options)
-                                : controller.searchItemNameOrBarcode(search: widget._searchItem!);
+                                : controller.searchItemNameOrBarcode(
+                                    search: widget._searchItem!);
                           },
                           name: item.name,
                           date: item.date,
-                          isIndicatorByColor: item.options == ListOptionsEnum.Rebaixar.name,
-                          daysForExpiration: controller.daysSelectedForExpiration,
+                          isIndicatorByColor:
+                              item.options == ListOptionsEnum.Rebaixar.name &&
+                                  widget._searchItem == null,
+                          daysForExpiration:
+                              controller.daysSelectedForExpiration,
                         ),
                       ),
                     );
@@ -112,11 +123,14 @@ class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPag
                   child: Text.rich(
                     TextSpan(
                       text: "Não ha nenhum ",
-                      style: const TextStyle(fontSize: 20, color: Colors.black54),
+                      style:
+                          const TextStyle(fontSize: 20, color: Colors.black54),
                       children: [
                         TextSpan(
                           text: widget._name ?? "Resultado",
-                          style: const TextStyle(color: Colors.black, decoration: TextDecoration.underline),
+                          style: const TextStyle(
+                              color: Colors.black,
+                              decoration: TextDecoration.underline),
                         ),
                       ],
                     ),

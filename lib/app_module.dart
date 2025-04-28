@@ -10,7 +10,7 @@ import 'app/core/notification_service/notification_service.dart';
 import 'app/core/notification_service/notification_service_impl.dart';
 import 'app/core/shara/flutter_share_app.dart';
 import 'app/core/shara/flutter_share_app_impl.dart';
-import 'app/module/Start_page/start_page_module.dart';
+import 'app/module/start_page/start_page_module.dart';
 import 'app/repositories/sql/sqflite_repository.dart';
 import 'app/repositories/sql/sqflite_repository_impl.dart';
 import 'app/services/sql/sqflite_service.dart';

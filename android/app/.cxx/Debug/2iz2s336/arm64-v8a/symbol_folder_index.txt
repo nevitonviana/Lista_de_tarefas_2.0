@@ -1,0 +1,1 @@
+/home/neviton/Área de trabalho/projetos/flutter/Lista_de_tarefas_2.0/build/app/intermediates/cxx/Debug/2iz2s336/obj/arm64-v8a

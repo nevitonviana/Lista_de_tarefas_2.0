@@ -22,7 +22,7 @@ class _DrawerCustomState extends State<_DrawerCustom> {
   Widget build(BuildContext context) {
     return Drawer(
       width: 200,
-      backgroundColor: Colors.white54
+      backgroundColor: Colors.white.withValues(alpha: 0.5)
       // .withOpacity(0.3
       ,
       elevation: 5,
@@ -41,18 +41,24 @@ class _DrawerCustomState extends State<_DrawerCustom> {
                 ListTile(
                   title: const Text(
                     "Validade",
-                    style: TextStyle(fontSize: 18, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                   subtitle: const Text("Ajuste os dias "),
                   trailing: const Icon(
                     Icons.access_time_outlined,
                     size: 30,
+                    color: Colors.black,
                   ),
                   onTap: () {
                     DialogCustom(context: context).showSelectDueDate(
-                      onPressed: () {
+                      onPressed: () async {
+
                         if (_selectDay.text.isNotEmpty) {
-                          widget.controller.saveDaysSelectedForExpiration(days: _selectDay.text);
+                          widget.controller.saveDaysSelectedForExpiration(
+                              days: _selectDay.text);
                           _selectDay.clear();
                           Navigator.pop(context);
                         } else {

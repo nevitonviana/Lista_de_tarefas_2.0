@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/home/neviton/src/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/neviton/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/neviton/Área de trabalho/projetos/flutter/Lista_de_tarefas_2.0/android/app/.cxx/Debug/2iz2s336/armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/neviton/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/neviton/Área de trabalho/projetos/flutter/Lista_de_tarefas_2.0/android/app/.cxx/Debug/2iz2s336/armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

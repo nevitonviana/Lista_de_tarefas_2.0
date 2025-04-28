@@ -19,7 +19,7 @@ class _CardDetail extends StatelessWidget {
     return GestureDetector(
         onTap: onTap,
         child: Card(
-          color: isIndicatorByColor ? Date.indicatorByColor(date: date, daysForExpiration:daysForExpiration ) : Colors.white70,
+          color: isIndicatorByColor ? Date.indicatorByColor(date: date, daysForExpiration:daysForExpiration ) : Colors.white,
           margin: const EdgeInsets.only(top: 15),
           elevation: 5,
           clipBehavior: Clip.antiAlias,

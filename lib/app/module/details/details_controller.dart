@@ -20,16 +20,21 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   final LocalStorage _storage;
 
   DetailsControllerBase(
-      {required SqfliteService service, required AppLogger log, required LocalStorage storage})
+      {required SqfliteService service,
+      required AppLogger log,
+      required LocalStorage storage})
       : _service = service,
         _log = log,
         _storage = storage;
 
   @override
   Future<void> onInit([Map<String, dynamic>? params]) async {
+    print(params);
     if (params?['name'] != null) {
+      print('nome');
       await getItems(params?['name']);
     } else {
+      print('iterm');
       searchItemNameOrBarcode(search: params?['searchItem'] ?? '');
     }
   }
@@ -85,21 +90,21 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
 
   Future<void> searchItemNameOrBarcode({required String search}) async {
     try {
-      Loader.show();
       final result = await _service.searchItemBarcodeOrName(search);
       listItems = result.asObservable();
-      Loader.hide();
     } catch (e, s) {
       _log.error("Erro ao buscar itens no banco de Dadods", e, s);
-      Messages.alert("Erro ao buacar dados ");
+      Messages.alert("Erro ao Buscar dados ");
     }
   }
 
   Future<void> getDaysSelectedForExpiration() async {
     try {
       Loader.show();
-      daysSelectedForExpiration =
-          int.tryParse(await _storage.read(Constants.Days_Selected_For_Expiration)) ?? 10;
+      daysSelectedForExpiration = int.tryParse(
+              await _storage.read(Constants.Days_Selected_For_Expiration) ??
+                  '10') ??
+          10;
     } catch (e, s) {
       _log.error("Erro ao buscar o dias ", e, s);
       Messages.alert("Erro ao buscar o dias ");

@@ -12,6 +12,7 @@ import 'details_item_controller.dart';
 import 'widgets/show_barcode.dart';
 
 part 'widgets/buttons_widget.dart';
+
 part 'widgets/label_widget.dart';
 
 // ignore: must_be_immutable
@@ -27,7 +28,8 @@ class DetailsItemPage extends StatefulWidget {
   State<DetailsItemPage> createState() => _DetailsItemPageState();
 }
 
-class _DetailsItemPageState extends PageLifeCycleState<DetailsItemController, DetailsItemPage> {
+class _DetailsItemPageState
+    extends PageLifeCycleState<DetailsItemController, DetailsItemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,17 +63,24 @@ class _DetailsItemPageState extends PageLifeCycleState<DetailsItemController, De
               ),
               _LabelWidget(
                   label: "Kg/Unidades",
-                  nameItem: widget._item.quantity!.isNotEmpty ? widget._item.quantity! : "1"),
-              _LabelWidget(label: "Status do Produto", nameItem: widget._item.options),
+                  nameItem: widget._item.quantity!.isNotEmpty
+                      ? widget._item.quantity!
+                      : "1"),
+              _LabelWidget(
+                  label: "Status do Produto", nameItem: widget._item.options),
               Visibility(
                 visible: widget._item.description!.isNotEmpty,
-                child: _LabelWidget(label: "Descrição", nameItem: widget._item.description ?? ""),
+                child: _LabelWidget(
+                    label: "Descrição",
+                    nameItem: widget._item.description ?? ""),
               ),
               const SizedBox(height: 20),
               _ButtonsWidget(
                 barcode: widget._item.barcode,
                 onTapEdit: () async {
-                  widget._item = (await Modular.to.pushNamed<ItemModel>("/home", arguments: widget._item))!;
+                  widget._item = (await Modular.to.pushNamed<ItemModel>("/home",
+                          arguments: widget._item)) ??
+                      widget._item.copyWith();
                   setState(() {});
                 },
                 onTapShare: () {

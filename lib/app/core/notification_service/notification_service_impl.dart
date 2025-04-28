@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -36,7 +34,7 @@ class NotificationServiceImpl implements NotificationService {
 
   @override
   showNotification(NotificationModel notificationsModel) {
-    _androidDetails = AndroidNotificationDetails(
+    _androidDetails = const AndroidNotificationDetails(
       "channelId",
       "channelName",
       importance: Importance.max,

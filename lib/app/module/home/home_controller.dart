@@ -88,7 +88,8 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
   Future<void> updateItem({required ItemModel item}) async {
     try {
       Loader.show();
-      await _service.updateItem(item.copyWith(date: selectedDateTime, options: selectedOption));
+      await _service.updateItem(
+          item.copyWith(date: selectedDateTime, options: selectedOption));
       Loader.hide();
       Modular.to.pop(item);
     } catch (e, s) {
@@ -116,20 +117,20 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
 
   Future<void> getDaysSelectedForExpiration() async {
     try {
-      Loader.show();
-      daysSelectedForExpiration = await _storage.read<String>(Constants.Days_Selected_For_Expiration);
+      daysSelectedForExpiration =
+          await _storage.read<String>(Constants.Days_Selected_For_Expiration);
     } catch (e, s) {
       _log.error("Erro ao buscar o dias ", e, s);
       Messages.alert("Erro ao buscar o dias ");
-    } finally {
-      Loader.hide();
-    }
+    } finally {}
   }
 
   Future<void> saveDaysSelectedForExpiration({required String days}) async {
     try {
       Loader.show();
-      await _storage.write<String>(Constants.Days_Selected_For_Expiration, days);
+      await _storage.write<String>(
+          Constants.Days_Selected_For_Expiration, days);
+      getDaysSelectedForExpiration();
       Loader.hide();
     } catch (e, s) {
       _log.error("Erro ao salva os dias para o vencimento", e, s);
@@ -144,11 +145,17 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
         (e) {
           var resultCheck = Date.checkDate(date: e.date, daysForExpiration: 10);
           if (resultCheck == 'rebaixar') {
-            _notificationService.showNotification(
-                NotificationModel(id: e.id!, title: "Rebaixar de produto", body: e.name, payload: "payload"));
+            _notificationService.showNotification(NotificationModel(
+                id: e.id!,
+                title: "Rebaixar de produto",
+                body: e.name,
+                payload: "payload"));
           } else if (resultCheck == "vencido") {
             _notificationService.showNotification(NotificationModel(
-                id: e.id!, title: "Produto Vencido na Loja", body: e.name, payload: "payload"));
+                id: e.id!,
+                title: "Produto Vencido na Loja",
+                body: e.name,
+                payload: "payload"));
           }
         },
       ).toList();

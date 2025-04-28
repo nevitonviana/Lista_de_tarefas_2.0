@@ -11,21 +11,30 @@ class DialogCustom {
       builder: (context) => AlertDialog(
         title: const Text("Deleta"),
         alignment: Alignment.center,
-        content:  Text("Tem certeza que gostariade apagar, $label ?", style: const TextStyle(fontSize: 17),),
+        content: Text(
+          "Tem certeza que gostaria de apagar, $label ?",
+          style: const TextStyle(fontSize: 17),
+        ),
         actions: [
           TextButton.icon(
             onPressed: () async {
               onPressedDelete.call();
               Navigator.pop(context);
             },
-            label: const Text("Deleta"),
+            label: const Text(
+              "Deleta",
+              style: TextStyle(color: Colors.red),
+            ),
             icon: const Icon(Icons.delete),
           ),
           TextButton.icon(
             onPressed: () {
               Navigator.pop(context);
             },
-            label: const Text("Cancelar"),
+            label: const Text(
+              "Cancelar",
+              style: TextStyle(color: Colors.blue),
+            ),
             icon: const Icon(Icons.cancel_outlined),
           ),
         ],

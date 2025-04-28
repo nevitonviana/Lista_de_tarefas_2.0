@@ -1,0 +1,2 @@
+/home/neviton/Área de trabalho/projetos/flutter/Lista_de_tarefas_2.0/android/app/.cxx/Debug/2iz2s336/x86/CMakeFiles/edit_cache.dir
+/home/neviton/Área de trabalho/projetos/flutter/Lista_de_tarefas_2.0/android/app/.cxx/Debug/2iz2s336/x86/CMakeFiles/rebuild_cache.dir

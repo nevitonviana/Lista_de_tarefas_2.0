@@ -68,41 +68,48 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
     _updateItem();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: _DrawerCustom(
         controller: controller,
       ),
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 5),
-            child: IconButton(
-              onPressed: () {
-                DialogCustom(context: context).showSearch(
-                  onPressedIcon: () async => _nameEC.text = await controller.barcodeScanner(),
-                  controller: _nameEC,
-                  onPressed: () async {
-                    await Modular.to.pushNamed("/details/details?searchItem=${_nameEC.text}");
-                    _nameEC.clear();
-                  },
-                );
-              },
-              icon: const Icon(
-                Icons.search_outlined,
-                size: 30,
-              ),
+      appBar: widget._item != null
+          ? AppBar(
+              title: Text('Editar'),
+              centerTitle: true,
+              leading: BackButton(),
+            )
+          : AppBar(
+              title: const Text('Home'),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: IconButton(
+                    onPressed: () {
+                      DialogCustom(context: context).showSearch(
+                        onPressedIcon: () async =>
+                            _nameEC.text = await controller.barcodeScanner(),
+                        controller: _nameEC,
+                        onPressed: () async {
+                          await Modular.to.pushNamed(
+                              "/details/details?searchItem=${_nameEC.text}");
+                          _nameEC.clear();
+                        },
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.search_outlined,
+                      size: 30,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.only(top: 50.w),
-          padding: EdgeInsets.symmetric(horizontal: 40.w),
+          padding: EdgeInsets.symmetric(horizontal: 35.w),
           child: Form(
             key: _formKey,
             child: Column(
@@ -121,19 +128,20 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                   label: "Codigo",
                   icon: Icons.integration_instructions_sharp,
                   validator: Validatorless.required("Campo Obrigatorio"),
-                  suffixIcon: const Icon(Icons.barcode_reader),
                 ),
                 CustomTextFormField(
                   controller: _quantityEC,
                   label: "Quantidade/Kg",
-                  textInputType: const TextInputType.numberWithOptions(decimal: true,signed: false ),
+                  textInputType: const TextInputType.numberWithOptions(
+                      decimal: true, signed: false),
                   icon: Icons.numbers_sharp,
                 ),
                 Observer(
                   builder: (_) {
                     // Midiaquery TODO
                     return Visibility(
-                      visible: controller.selectedOption == ListOptionsEnum.Outros.name,
+                      visible: controller.selectedOption ==
+                          ListOptionsEnum.Outros.name,
                       child: CustomTextFormField(
                         textInputType: TextInputType.multiline,
                         controller: _descriptionEC,
@@ -158,10 +166,15 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                             iconSize: 30,
                             padding: const EdgeInsets.only(left: 10),
                             value: controller.selectedOption,
-                            validator: Validatorless.required('Campo Obrigatorio'),
+                            validator:
+                                Validatorless.required('Campo Obrigatorio'),
                             alignment: Alignment.center,
-                            hint: const Text('Opições',textAlign: TextAlign.center,),
-                            onChanged: (value) => controller.selectedOption = value,
+                            hint: const Text(
+                              'Opições',
+                              textAlign: TextAlign.center,
+                            ),
+                            onChanged: (value) =>
+                                controller.selectedOption = value,
                             items: ListOptionsEnum.values
                                 .map<DropdownMenuItem<String>>(
                                   (e) => DropdownMenuItem(
@@ -189,7 +202,8 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                   label: "Salvar",
                   icon: Icons.save,
                   onPressed: () {
-                    final formValid = _formKey.currentState?.validate() ?? false;
+                    final formValid =
+                        _formKey.currentState?.validate() ?? false;
                     _formKey.currentState?.save();
                     if (formValid) {
                       if (controller.selectedDateTime != null) {
