@@ -14,17 +14,15 @@ class FlutterShareAppImpl implements FlutterShareApp {
   @override
   void shareItem(ItemModel item) {
     try {
+      final description =
+          item.description!.isNotEmpty ? item.description : 'Sem Descrição';
       SharePlus.instance.share(
         ShareParams(
-          ///TODO ver como ficsa no whatsapp
+          //o Texto a baixo nao pode ser alinha, pq o whatsapp nao aceita
           text: '''
-         - Nome:  \t ${item.name} 
-         - Codigo:\t ${item.barcode} 
-         - Info:  \t ${item.options} 
-         - Data:  \t *${Date.format(item.date)}* 
-         - Quantidade: \t ${item.quantity}UN/Kg
-         - Descrição: \t  ${item.description}  
-          ''',
+         - Nome:\t${item.name}\n- Codigo:\t${item.barcode}\n- Info:\t *${item.options}*
+- Data:\t*${Date.format(item.date)}*\n- Quantidade: \t ${item.quantity} UN/Kg\n- Descrição: \t $description'''
+              .trim(),
         ),
       );
     } catch (e, s) {
