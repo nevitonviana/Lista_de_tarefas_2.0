@@ -49,6 +49,22 @@ mixin _$DetailsController on DetailsControllerBase, Store {
     });
   }
 
+  late final _$itemFinishedAtom =
+      Atom(name: 'DetailsControllerBase.itemFinished', context: context);
+
+  @override
+  ItemModel? get itemFinished {
+    _$itemFinishedAtom.reportRead();
+    return super.itemFinished;
+  }
+
+  @override
+  set itemFinished(ItemModel? value) {
+    _$itemFinishedAtom.reportWrite(value, super.itemFinished, () {
+      super.itemFinished = value;
+    });
+  }
+
   late final _$getItemsAsyncAction =
       AsyncAction('DetailsControllerBase.getItems', context: context);
 
@@ -63,6 +79,25 @@ mixin _$DetailsController on DetailsControllerBase, Store {
   @override
   Future<void> deleteItem({required int id}) {
     return _$deleteItemAsyncAction.run(() => super.deleteItem(id: id));
+  }
+
+  late final _$getDaysSelectedForExpirationAsyncAction = AsyncAction(
+      'DetailsControllerBase.getDaysSelectedForExpiration',
+      context: context);
+
+  @override
+  Future<void> getDaysSelectedForExpiration() {
+    return _$getDaysSelectedForExpirationAsyncAction
+        .run(() => super.getDaysSelectedForExpiration());
+  }
+
+  late final _$updateFinishedAsyncAction =
+      AsyncAction('DetailsControllerBase.updateFinished', context: context);
+
+  @override
+  Future<void> updateFinished({required ItemModel item}) {
+    return _$updateFinishedAsyncAction
+        .run(() => super.updateFinished(item: item));
   }
 
   late final _$DetailsControllerBaseActionController =
@@ -83,7 +118,8 @@ mixin _$DetailsController on DetailsControllerBase, Store {
   String toString() {
     return '''
 listItems: ${listItems},
-daysSelectedForExpiration: ${daysSelectedForExpiration}
+daysSelectedForExpiration: ${daysSelectedForExpiration},
+itemFinished: ${itemFinished}
     ''';
   }
 }

@@ -75,7 +75,7 @@ class _DetailsPageState
               ? ListView.builder(
                   itemCount: controller.listItems.length,
                   itemBuilder: (context, index) {
-                    final ItemModel item = controller.listItems[index];
+                    ItemModel item = controller.listItems[index];
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -99,6 +99,11 @@ class _DetailsPageState
                           return false;
                         },
                         child: _CardDetail(
+                          onDoubleTap: () {
+                            final updatedItem =
+                                item.copyWith(finished: !item.finished);
+                            controller.updateFinished(item: updatedItem);
+                          },
                           onTap: () async {
                             await Modular.to.pushNamed('/details/detailsItem',
                                 arguments: item);
@@ -107,6 +112,7 @@ class _DetailsPageState
                                 : controller.searchItemNameOrBarcode(
                                     search: widget._searchItem!);
                           },
+                          isRebaixa: item.finished,
                           name: item.name,
                           date: item.date,
                           isIndicatorByColor:

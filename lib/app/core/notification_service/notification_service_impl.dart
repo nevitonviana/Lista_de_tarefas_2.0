@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../models/list_options_enum.dart';
 import '../../models/notification_model.dart';
 import 'notification_service.dart';
 
@@ -28,7 +29,8 @@ class NotificationServiceImpl implements NotificationService {
 
   _onDidReceiveNotificationResponse(NotificationResponse details) {
     if (details.payload != null && details.payload!.isNotEmpty) {
-      Modular.to.pushNamed("/details/details?name=Rebaixar");
+      Modular.to
+          .pushNamed("/details/details?name=${ListOptionsEnum.Rebaixa.name}");
     }
   }
 

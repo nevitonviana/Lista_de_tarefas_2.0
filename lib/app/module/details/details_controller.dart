@@ -48,6 +48,9 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   @observable
   late int daysSelectedForExpiration;
 
+  @observable
+  ItemModel? itemFinished;
+
   @action
   Future<void> getItems(String name) async {
     try {
@@ -95,6 +98,7 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     }
   }
 
+  @action
   Future<void> getDaysSelectedForExpiration() async {
     try {
       Loader.show();
@@ -107,6 +111,21 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
       Messages.alert("Erro ao buscar o dias ");
     } finally {
       Loader.hide();
+    }
+  }
+
+  @action
+  Future<void> updateFinished({required ItemModel item}) async {
+    try {
+      await _service.updateItem(item);
+
+      final index = listItems.indexWhere((i) => i.id == item.id);
+      if (index != -1) {
+        listItems[index] = item;
+      }
+    } catch (e, s) {
+      _log.error("Erro ao atualizar indicador", e, s);
+      Messages.alert("Erro ao atualizar indicador ");
     }
   }
 }

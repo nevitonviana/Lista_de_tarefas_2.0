@@ -143,13 +143,20 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
       final result = await _service.getItemAndCheckValidity();
       result.map(
         (e) {
-          var resultCheck = Date.checkDate(date: e.date, daysForExpiration: 10);
+          var resultCheck = Date.checkDate(
+              date: e.date,
+              daysForExpiration:
+                  int.tryParse(daysSelectedForExpiration ?? '10') ?? 10);
           if (resultCheck == 'rebaixar') {
-            _notificationService.showNotification(NotificationModel(
+            _notificationService.showNotification(
+              NotificationModel(
                 id: e.id!,
                 title: "Rebaixar de produto",
                 body: e.name,
-                payload: "payload"));
+                payload: "payload",
+              ),
+            );
+
           } else if (resultCheck == "vencido") {
             _notificationService.showNotification(NotificationModel(
                 id: e.id!,
