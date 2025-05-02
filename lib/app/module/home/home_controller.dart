@@ -71,6 +71,7 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
         description: description,
         quantity: quantity,
         finished: false,
+        showNotification: false,
       );
       await _service.saveItem(item);
       selectedOption = null;
@@ -147,7 +148,7 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
               date: e.date,
               daysForExpiration:
                   int.tryParse(daysSelectedForExpiration ?? '10') ?? 10);
-          if (resultCheck == 'rebaixar') {
+          if (resultCheck == 'rebaixar' && e.showNotification == false) {
             _notificationService.showNotification(
               NotificationModel(
                 id: e.id!,
@@ -156,7 +157,7 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
                 payload: "payload",
               ),
             );
-
+            updateShowNotification(item: e);
           } else if (resultCheck == "vencido") {
             _notificationService.showNotification(NotificationModel(
                 id: e.id!,
@@ -169,6 +170,15 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
     } catch (e, s) {
       _log.error("Erro ao mostar as Notificações dos itens", e, s);
       Messages.info("Erro ao mostar as Notificações dos itens");
+    }
+  }
+
+  Future<void> updateShowNotification({required ItemModel item}) async {
+    try {
+      await _service.updateItem(item.copyWith(showNotification: true));
+    } catch (e, s) {
+      _log.error("Erro ao atualizar o showNotification", e, s);
+      Messages.info("Erro ao atualizar o showNotification");
     }
   }
 }

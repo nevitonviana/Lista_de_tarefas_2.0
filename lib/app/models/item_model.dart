@@ -8,6 +8,8 @@ class ItemModel {
   final String options;
   final bool finished;
 
+  final bool showNotification;
+
 //<editor-fold desc="Data Methods">
   const ItemModel({
     this.id,
@@ -18,6 +20,7 @@ class ItemModel {
     required this.date,
     required this.options,
     required this.finished,
+    required this.showNotification
   });
 
   @override
@@ -32,7 +35,8 @@ class ItemModel {
           quantity == other.quantity &&
           date == other.date &&
           options == other.options &&
-          finished == other.finished);
+          finished == other.finished &&
+          showNotification == other.showNotification);
 
   @override
   int get hashCode =>
@@ -43,11 +47,12 @@ class ItemModel {
       quantity.hashCode ^
       date.hashCode ^
       options.hashCode ^
-      finished.hashCode;
+      finished.hashCode ^
+      showNotification.hashCode;
 
   @override
   String toString() {
-    return 'ItemModel{ id: $id, name: $name, barcode: $barcode, description: $description, quantity: $quantity, date: $date, options: $options, finished: $finished,}';
+    return 'ItemModel{ id: $id, name: $name, barcode: $barcode, description: $description, quantity: $quantity, date: $date, options: $options, finished: $finished, showNotification: $showNotification }';
   }
 
   ItemModel copyWith({
@@ -59,6 +64,7 @@ class ItemModel {
     DateTime? date,
     String? options,
     bool? finished,
+    bool? showNotification,
   }) {
     return ItemModel(
       id: id ?? this.id,
@@ -69,6 +75,7 @@ class ItemModel {
       date: date ?? this.date,
       options: options ?? this.options,
       finished: finished ?? this.finished,
+      showNotification: showNotification ?? this.showNotification,
     );
   }
 
@@ -82,6 +89,7 @@ class ItemModel {
       'date': date.toIso8601String(),
       'options': options,
       'finished': finished == true ? 1 : 0,
+      'show_notification': showNotification == true ? 1 : 0,
     };
   }
 
@@ -95,6 +103,7 @@ class ItemModel {
       date: DateTime.parse(map['date']),
       options: map['options'] ?? '',
       finished: map['finished'] == 1,
+      showNotification: map['show_notification'] == 1,
     );
   }
 
