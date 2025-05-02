@@ -118,7 +118,6 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   Future<void> updateFinished({required ItemModel item}) async {
     try {
       await _service.updateItem(item);
-
       final index = listItems.indexWhere((i) => i.id == item.id);
       if (index != -1) {
         listItems[index] = item;

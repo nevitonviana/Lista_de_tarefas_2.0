@@ -4,10 +4,10 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
 
-import 'sqlite_migration factory.dart';
+import 'sqlite_migration_factory.dart';
 
 class SqliteConnectionFactory {
-  static const _version = 1;
+  static const _version = 2;
   static const _databaseName = "LISTA_DE_TAREFAS_BD";
   static SqliteConnectionFactory? _instance;
 
@@ -52,16 +52,16 @@ class SqliteConnectionFactory {
     for (var migration in migrations) {
       migration.create(batch);
     }
-    batch.commit();
+    await batch.commit();
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     final batch = db.batch();
-    final migrations = SqliteMigrationFactory().getUpdateMigrations();
+    final migrations = SqliteMigrationFactory().getUpdateMigrations(oldVersion);
     for (var migration in migrations) {
-      migration.create(batch);
+      migration.update(batch);
     }
-    batch.commit();
+    await batch.commit();
   }
 
   void closeConnection() {
