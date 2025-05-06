@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
@@ -148,22 +149,27 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
               date: e.date,
               daysForExpiration:
                   int.tryParse(daysSelectedForExpiration ?? '10') ?? 10);
-          if (resultCheck == 'rebaixar' && e.showNotification == false) {
+          if (resultCheck == 'rebaixar' && e.showNotification) {
             _notificationService.showNotification(
               NotificationModel(
                 id: e.id!,
                 title: "Rebaixar de produto",
                 body: e.name,
                 payload: "payload",
+                color: Colors.yellowAccent,
               ),
             );
             updateShowNotification(item: e);
           } else if (resultCheck == "vencido") {
-            _notificationService.showNotification(NotificationModel(
+            _notificationService.showNotification(
+              NotificationModel(
                 id: e.id!,
                 title: "Produto Vencido na Loja",
-                body: e.name,
-                payload: "payload"));
+                body: '\t\t ${e.name}',
+                payload: "payload",
+                color: const Color(0xFFF44336),
+              ),
+            );
           }
         },
       ).toList();

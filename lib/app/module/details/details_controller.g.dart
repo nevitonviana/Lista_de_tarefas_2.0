@@ -65,6 +65,22 @@ mixin _$DetailsController on DetailsControllerBase, Store {
     });
   }
 
+  late final _$markedForSharingAtom =
+      Atom(name: 'DetailsControllerBase.markedForSharing', context: context);
+
+  @override
+  ObservableList<ItemModel> get markedForSharing {
+    _$markedForSharingAtom.reportRead();
+    return super.markedForSharing;
+  }
+
+  @override
+  set markedForSharing(ObservableList<ItemModel> value) {
+    _$markedForSharingAtom.reportWrite(value, super.markedForSharing, () {
+      super.markedForSharing = value;
+    });
+  }
+
   late final _$getItemsAsyncAction =
       AsyncAction('DetailsControllerBase.getItems', context: context);
 
@@ -77,8 +93,9 @@ mixin _$DetailsController on DetailsControllerBase, Store {
       AsyncAction('DetailsControllerBase.deleteItem', context: context);
 
   @override
-  Future<void> deleteItem({required int id}) {
-    return _$deleteItemAsyncAction.run(() => super.deleteItem(id: id));
+  ObservableFuture<void> deleteItem({required int id}) {
+    return ObservableFuture<void>(
+        _$deleteItemAsyncAction.run(() => super.deleteItem(id: id)));
   }
 
   late final _$getDaysSelectedForExpirationAsyncAction = AsyncAction(
@@ -100,6 +117,15 @@ mixin _$DetailsController on DetailsControllerBase, Store {
         .run(() => super.updateFinished(item: item));
   }
 
+  late final _$brandToShareAsyncAction =
+      AsyncAction('DetailsControllerBase.brandToShare', context: context);
+
+  @override
+  ObservableFuture<void> brandToShare({required ItemModel item}) {
+    return ObservableFuture<void>(
+        _$brandToShareAsyncAction.run(() => super.brandToShare(item: item)));
+  }
+
   late final _$DetailsControllerBaseActionController =
       ActionController(name: 'DetailsControllerBase', context: context);
 
@@ -119,7 +145,8 @@ mixin _$DetailsController on DetailsControllerBase, Store {
     return '''
 listItems: ${listItems},
 daysSelectedForExpiration: ${daysSelectedForExpiration},
-itemFinished: ${itemFinished}
+itemFinished: ${itemFinished},
+markedForSharing: ${markedForSharing}
     ''';
   }
 }

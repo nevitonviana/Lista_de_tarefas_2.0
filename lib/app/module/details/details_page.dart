@@ -34,6 +34,8 @@ class _DetailsPageState
   Map<String, dynamic>? get params =>
       {'name': widget._name, 'searchItem': widget._searchItem};
 
+  bool _isSelectable = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,26 +46,65 @@ class _DetailsPageState
         actions: [
           Observer(
             builder: (context) {
-              return Visibility(
-                visible:
-                    controller.listItems.isNotEmpty && widget._name != null,
-                child: IconButton(
-                  onPressed: () {
-                    DialogCustom(context).dialogDelete(
-                      onPressedDelete: () {
-                        controller.deleteAllItems(
-                            optionOfDeletes: widget._name!);
-                      },
-                      label: ' todos os itens de ${widget._name}',
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                    opticalSize: 30,
-                    size: 30,
+              return Row(
+                children: [
+                  Visibility(
+                    visible: _isSelectable,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            setState(
+                              () {
+                                _isSelectable = false;
+                                controller.markedForSharing.clear();
+                              },
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.close_rounded,
+                            size: 30,
+                            color: Colors.redAccent,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            controller.shareListItem();
+                            setState(() {
+                              _isSelectable = false;
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.share_rounded,
+                            color: Colors.blue,
+                            size: 30,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
+                  Visibility(
+                    visible:
+                        controller.listItems.isNotEmpty && widget._name != null,
+                    child: IconButton(
+                      onPressed: () {
+                        DialogCustom(context).dialogDelete(
+                          onPressedDelete: () {
+                            controller.deleteAllItems(
+                                optionOfDeletes: widget._name!);
+                          },
+                          label: ' todos os itens de ${widget._name}',
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                        opticalSize: 30,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),
@@ -76,7 +117,6 @@ class _DetailsPageState
                   itemCount: controller.listItems.length,
                   itemBuilder: (context, index) {
                     ItemModel item = controller.listItems[index];
-
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: CustomDismissible(
@@ -99,19 +139,36 @@ class _DetailsPageState
                           return false;
                         },
                         child: _CardDetail(
+                          onTap: _isSelectable
+                              ? null
+                              : () async {
+                                  await Modular.to.pushNamed(
+                                      '/details/detailsItem',
+                                      arguments: item);
+                                  widget._searchItem == null
+                                      ? await controller.getItems(item.options)
+                                      : controller.searchItemNameOrBarcode(
+                                          search: widget._searchItem!);
+                                },
+                          onChanged: (value) {
+                            controller.brandToShare(item: item);
+                            _isSelectable =
+                                controller.markedForSharing.isNotEmpty;
+                            setState(() {});
+                          },
                           onDoubleTap: () {
                             final updatedItem =
                                 item.copyWith(finished: !item.finished);
                             controller.updateFinished(item: updatedItem);
                           },
-                          onTap: () async {
-                            await Modular.to.pushNamed('/details/detailsItem',
-                                arguments: item);
-                            widget._searchItem == null
-                                ? await controller.getItems(item.options)
-                                : controller.searchItemNameOrBarcode(
-                                    search: widget._searchItem!);
+                          onLongPress: () {
+                            _isSelectable = true;
+                            setState(() {
+                              controller.brandToShare(item: item);
+                            });
                           },
+                          isSelectable: _isSelectable,
+                          selectedCard: controller.isItemSelected(item),
                           isRebaixa: item.finished,
                           name: item.name,
                           date: item.date,

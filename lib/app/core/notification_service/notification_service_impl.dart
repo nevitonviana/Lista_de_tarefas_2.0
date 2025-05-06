@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -35,16 +34,21 @@ class NotificationServiceImpl implements NotificationService {
   }
 
   @override
-  showNotification(NotificationModel notificationsModel) {
-    _androidDetails = const AndroidNotificationDetails(
+  Future<void> showNotification(NotificationModel notificationsModel) async {
+    _androidDetails = AndroidNotificationDetails(
       "channelId",
       "channelName",
       importance: Importance.max,
       priority: Priority.high,
       enableLights: true,
-      color: Colors.red,
+      enableVibration: true,
+      playSound: true,
+      color: notificationsModel.color,
+      icon: '@mipmap/ic_launcher',
+      ticker: 'ticker',
+      colorized: true,
     );
-    _localNotificationsPlugin.show(
+    await _localNotificationsPlugin.show(
       notificationsModel.id,
       notificationsModel.title,
       notificationsModel.body,

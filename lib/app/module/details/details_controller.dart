@@ -5,6 +5,7 @@ import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/local_storage/local_storage.dart';
 import '../../core/logger/app_logger.dart';
 
+import '../../core/share/flutter_share_app.dart';
 import '../../core/ui/widgets/loader.dart';
 import '../../core/ui/widgets/messages.dart';
 import '../../models/item_model.dart';
@@ -18,14 +19,17 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   final SqfliteService _service;
   final AppLogger _log;
   final LocalStorage _storage;
+  final FlutterShareApp _shareApp;
 
   DetailsControllerBase(
       {required SqfliteService service,
       required AppLogger log,
-      required LocalStorage storage})
+      required LocalStorage storage,
+      required FlutterShareApp shareApp})
       : _service = service,
         _log = log,
-        _storage = storage;
+        _storage = storage,
+        _shareApp = shareApp;
 
   @override
   Future<void> onInit([Map<String, dynamic>? params]) async {
@@ -51,6 +55,11 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   @observable
   ItemModel? itemFinished;
 
+  @observable
+  ObservableList<ItemModel> markedForSharing = ObservableList();
+
+  bool isItemSelected(ItemModel item) => markedForSharing.contains(item);
+
   @action
   Future<void> getItems(String name) async {
     try {
@@ -62,6 +71,7 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     }
   }
 
+  @alwaysNotify
   @action
   Future<void> deleteItem({required int id}) async {
     try {
@@ -125,6 +135,33 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     } catch (e, s) {
       _log.error("Erro ao atualizar indicador", e, s);
       Messages.alert("Erro ao atualizar indicador ");
+    }
+  }
+
+  @action
+  @alwaysNotify
+  Future<void> brandToShare({required ItemModel item}) async {
+    try {
+      if (markedForSharing.contains(item)) {
+        markedForSharing.remove(item);
+      } else {
+        markedForSharing.add(item);
+      }
+    } catch (e, s) {
+      _log.error("Erro ao marcar para compartilhar", e, s);
+      Messages.alert("Erro ao marcar para compartilhar");
+    }
+  }
+
+  Future<void> shareListItem() async {
+    try {
+      _shareApp.shareListItem(markedForSharing);
+      markedForSharing.clear();
+    } catch (e, s) {
+      _log.error("Erro ao compartilhar itens", e, s);
+      Messages.alert("Erro ao compartilhar itens");
+    }finally{
+      markedForSharing.clear();
     }
   }
 }

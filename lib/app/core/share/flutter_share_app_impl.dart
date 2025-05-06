@@ -14,20 +14,48 @@ class FlutterShareAppImpl implements FlutterShareApp {
   @override
   void shareItem(ItemModel item) {
     try {
-      final description =
-          item.description!.isNotEmpty ? item.description : 'Sem Descrição';
       SharePlus.instance.share(
         ShareParams(
-          //o Texto a baixo nao pode ser alinha, pq o whatsapp nao aceita
-          text: '''
-         - Nome:\t${item.name}\n- Codigo:\t${item.barcode}\n- Info:\t *${item.options}*
-- Data:\t*${Date.format(item.date)}*\n- Quantidade: \t ${item.quantity} UN/Kg\n- Descrição: \t $description'''
-              .trim(),
+          text: _createShareParams(item),
         ),
       );
     } catch (e, s) {
       _log.error("Erro ao compartilhas os itens", e, s);
       const Failure(message: "Erro ao compartilhas os itens");
     }
+  }
+
+  @override
+  Future<void> shareListItem(List<ItemModel> items) async {
+    try {
+      final listItems = items.map((e) => _createShareParams(e)).toList();
+
+      SharePlus.instance.share(
+        ShareParams(
+          text: listItems.join('\n\n'),
+        ),
+      );
+    } catch (e, s) {
+      _log.error("Erro ao compartilhar os itens", e, s);
+      const Failure(message: "Erro ao compartilhar os itens");
+    }
+  }
+
+  String _createShareParams(ItemModel item) {
+    final buffer = StringBuffer();
+
+    final description = item.description?.isNotEmpty == true
+        ? item.description
+        : 'Sem descrição';
+
+    buffer.writeln("📝 Produto: *${item.name}*");
+    buffer.writeln("📦 Código: ${item.barcode}");
+    buffer.writeln("📁 Categoria: ${item.options}");
+    buffer.writeln("📅 Data: *${Date.format(item.date)}*");
+    buffer.writeln("📊 Quantidade: ${item.quantity} UN/Kg");
+    buffer.writeln("🧾 Descrição: $description");
+    buffer.writeln("------------------------");
+
+    return buffer.toString().trim();
   }
 }
