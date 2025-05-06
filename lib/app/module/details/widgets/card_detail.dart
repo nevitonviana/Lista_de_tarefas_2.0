@@ -40,10 +40,7 @@ class _CardDetail extends StatelessWidget {
                 ? Colors.blue
                 : Colors.red
             : Colors.transparent,
-        color: isIndicatorByColor
-            ? Date.indicatorByColor(
-                date: date, daysForExpiration: daysForExpiration)
-            : Colors.white,
+        color: Colors.white,
         margin: const EdgeInsets.only(top: 15),
         elevation: 10,
         clipBehavior: Clip.antiAlias,
@@ -51,25 +48,31 @@ class _CardDetail extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
         ),
         child: Container(
-          color: isSelectable ? Colors.grey : Colors.transparent,
-          height: 85.h,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            children: [
-              Visibility(
-                visible: isSelectable,
-                child: Checkbox(value: selectedCard, onChanged: onChanged),
-              ),
-              Text(
-                name,
-                style: const TextStyle(fontSize: 18),
-              ),
-              const Spacer(),
-              Text(
-                Date.format(date),
-                style: const TextStyle(fontSize: 20),
-              ),
-            ],
+          color:  isIndicatorByColor
+              ? Date.indicatorByColor(
+              date: date, daysForExpiration: daysForExpiration)
+              : Colors.white,
+          child: Container(
+            color: isSelectable ? Colors.grey : Colors.transparent,
+            height: 85.h,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                Visibility(
+                  visible: isSelectable,
+                  child: Checkbox(value: selectedCard, onChanged: onChanged),
+                ),
+                Text(
+                  name,
+                  style: const TextStyle(fontSize: 18),
+                ),
+                const Spacer(),
+                Text(
+                  Date.format(date),
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
           ),
         ),
       ),

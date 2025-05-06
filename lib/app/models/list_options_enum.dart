@@ -14,9 +14,9 @@ extension ListOptionsEnumIcons on ListOptionsEnum {
       case ListOptionsEnum.Rebaixa:
         return Icons.paid_rounded;
       case ListOptionsEnum.Consumo:
-        return Icons.delete_sharp;
-      case ListOptionsEnum.Quebras:
         return Icons.dining_outlined;
+      case ListOptionsEnum.Quebras:
+        return Icons.delete_sharp;
       case ListOptionsEnum.Transformar:
         return Icons.flip_camera_android_rounded;
       case ListOptionsEnum.Outros:
