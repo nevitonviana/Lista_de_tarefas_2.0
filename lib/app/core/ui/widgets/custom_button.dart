@@ -29,12 +29,11 @@ class CustomButton extends StatelessWidget {
         padding: const EdgeInsets.only(left: 10),
         child: Text(
           label,
-          style: TextStyle(fontSize: 20.tx, fontWeight: FontWeight.bold),
+          style: const TextStyle().copyWith(color: Colors.white),
         ),
       ),
       icon: Icon(
         icon,
-        color: Colors.black,
       ),
     );
   }

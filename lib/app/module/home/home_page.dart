@@ -81,7 +81,12 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
               leading: const BackButton(),
             )
           : AppBar(
-              title: const Text('Home'),
+              title: const Text(
+                'Home',
+                style: TextStyle(
+
+                ),
+              ),
               centerTitle: true,
               actions: [
                 Padding(
