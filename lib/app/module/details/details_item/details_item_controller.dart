@@ -8,13 +8,15 @@ import '../../../models/item_model.dart';
 
 part 'details_item_controller.g.dart';
 
-class DetailsItemController = DetailsItemControllerBase with _$DetailsItemController;
+class DetailsItemController = DetailsItemControllerBase
+    with _$DetailsItemController;
 
 abstract class DetailsItemControllerBase with Store, ControllerLifeCycle {
   final AppLogger _log;
   final FlutterShareApp _shareApp;
 
-  DetailsItemControllerBase({required AppLogger log, required FlutterShareApp shareApp})
+  DetailsItemControllerBase(
+      {required AppLogger log, required FlutterShareApp shareApp})
       : _log = log,
         _shareApp = shareApp;
 
@@ -23,10 +25,18 @@ abstract class DetailsItemControllerBase with Store, ControllerLifeCycle {
 
   void shareItem({required ItemModel item}) {
     try {
-      _shareApp.shareItem(item);
+      _shareApp.shareItem(_checkEmptyField(item: item));
     } catch (e, s) {
       _log.error("Erro ao compartilhas os itens", e, s);
       Messages.warning("Erro ao compartilhas os itens");
     }
+  }
+
+  ItemModel _checkEmptyField({required ItemModel item}) {
+    final description = item.description?.isNotEmpty == true
+        ? item.description
+        : '~Sem descrição~';
+    final quantity = item.quantity?.isNotEmpty == true ? item.quantity : '1';
+    return item.copyWith(description: description, quantity: quantity);
   }
 }

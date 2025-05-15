@@ -44,16 +44,12 @@ class FlutterShareAppImpl implements FlutterShareApp {
   String _createShareParams(ItemModel item) {
     final buffer = StringBuffer();
 
-    final description = item.description?.isNotEmpty == true
-        ? item.description
-        : 'Sem descrição';
-
     buffer.writeln("📝 Produto: *${item.name}*");
     buffer.writeln("📦 Código: ${item.barcode}");
-    buffer.writeln("📁 Categoria: ${item.options}");
+    buffer.writeln("📁 Categoria: _${item.options}_");
     buffer.writeln("📅 Data: *${Date.format(item.date)}*");
     buffer.writeln("📊 Quantidade: ${item.quantity} UN/Kg");
-    buffer.writeln("🧾 Descrição: $description");
+    buffer.writeln("🧾 Descrição: ${item.description}");
     buffer.writeln("------------------------");
 
     return buffer.toString().trim();

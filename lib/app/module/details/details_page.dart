@@ -34,7 +34,13 @@ class _DetailsPageState
   Map<String, dynamic>? get params =>
       {'name': widget._name, 'searchItem': widget._searchItem};
 
-  bool _isSelectable = false;
+  bool _selectionMode = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +55,14 @@ class _DetailsPageState
               return Row(
                 children: [
                   Visibility(
-                    visible: _isSelectable,
+                    visible: _selectionMode,
                     child: Row(
                       children: [
                         IconButton(
                           onPressed: () {
                             setState(
                               () {
-                                _isSelectable = false;
+                                _selectionMode = false;
                                 controller.markedForSharing.clear();
                               },
                             );
@@ -71,7 +77,7 @@ class _DetailsPageState
                           onPressed: () {
                             controller.shareListItem();
                             setState(() {
-                              _isSelectable = false;
+                              _selectionMode = false;
                             });
                           },
                           icon: const Icon(
@@ -138,45 +144,50 @@ class _DetailsPageState
                           }
                           return false;
                         },
-                        child: _CardDetail(
-                          onTap: _isSelectable
-                              ? null
-                              : () async {
-                                  await Modular.to.pushNamed(
-                                      '/details/detailsItem',
-                                      arguments: item);
-                                  widget._searchItem == null
-                                      ? await controller.getItems(item.options)
-                                      : controller.searchItemNameOrBarcode(
-                                          search: widget._searchItem!);
-                                },
-                          onChanged: (value) {
-                            controller.brandToShare(item: item);
-                            _isSelectable =
-                                controller.markedForSharing.isNotEmpty;
-                            setState(() {});
-                          },
-                          onDoubleTap: () {
-                            final updatedItem =
-                                item.copyWith(finished: !item.finished);
-                            controller.updateFinished(item: updatedItem);
-                          },
-                          onLongPress: () {
-                            _isSelectable = true;
-                            setState(() {
-                              controller.brandToShare(item: item);
-                            });
-                          },
-                          isSelectable: _isSelectable,
-                          selectedCard: controller.isItemSelected(item),
-                          isRebaixa: item.finished,
-                          name: item.name,
-                          date: item.date,
-                          isIndicatorByColor:
-                              item.options == ListOptionsEnum.Rebaixa.name &&
-                                  widget._searchItem == null,
-                          daysForExpiration:
-                              controller.daysSelectedForExpiration,
+                        child: Observer(
+                          builder: (context) {
+                            return _CardDetail(
+                              onTap: _selectionMode
+                                  ? null
+                                  : () async {
+                                      await Modular.to.pushNamed(
+                                          '/details/detailsItem',
+                                          arguments: item);
+                                      widget._searchItem == null
+                                          ? await controller.getItems(item.options)
+                                          : controller.searchItemNameOrBarcode(
+                                              search: widget._searchItem!);
+                                    },
+                              onChanged: (value) {
+
+                                  controller.brandToShare(item: item);
+                                  _selectionMode =
+                                      controller.markedForSharing.isNotEmpty;
+
+                              },
+                              onDoubleTap: () {
+                                final updatedItem =
+                                    item.copyWith(finished: !item.finished);
+                                controller.updateFinished(item: updatedItem);
+                              },
+                              onLongPress: () {
+                                _selectionMode = true;
+                                setState(() {
+                                  controller.brandToShare(item: item);
+                                });
+                              },
+                              isSelectable: _selectionMode,
+                              selectedCard: controller.isItemSelected(item),
+                              isRebaixa: item.finished,
+                              name: item.name,
+                              date: item.date,
+                              isIndicatorByColor:
+                                  item.options == ListOptionsEnum.Rebaixa.name &&
+                                      widget._searchItem == null,
+                              daysForExpiration:
+                                  controller.daysSelectedForExpiration,
+                            );
+                          }
                         ),
                       ),
                     );

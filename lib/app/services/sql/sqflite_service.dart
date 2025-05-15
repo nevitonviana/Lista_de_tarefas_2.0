@@ -5,8 +5,6 @@ abstract class SqfliteService {
 
   Future<List<ItemModel>> getItemOption(String option);
 
-  Future<List<ItemModel>> getItemAndCheckValidity();
-
   Future<List<ItemModel>> searchItemBarcodeOrName(String search);
 
   Future<void> updateItem(ItemModel itemModel);

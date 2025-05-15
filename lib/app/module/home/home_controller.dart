@@ -12,6 +12,7 @@ import '../../core/ui/widgets/date.dart';
 import '../../core/ui/widgets/loader.dart';
 import '../../core/ui/widgets/messages.dart';
 import '../../models/item_model.dart';
+import '../../models/list_options_enum.dart';
 import '../../models/notification_model.dart';
 import '../../services/sql/sqflite_service.dart';
 
@@ -42,9 +43,9 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
         _notificationService = notificationService;
 
   @override
-  void onReady() {
-    getDaysSelectedForExpiration();
-    _showNotificationForExpiredAndForDowngrading();
+  Future<void> onReady() async {
+   await  getDaysSelectedForExpiration();
+   await  _showNotificationForExpiredAndForDowngrading();
   }
 
   @observable
@@ -75,13 +76,13 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
         showNotification: false,
       );
       await _service.saveItem(item);
-      selectedOption = null;
-      selectedDateTime = null;
       Messages.success("Salvo com sucesso");
     } catch (e, s) {
       _log.error("Erro ao salvar dados", e, s);
-      Messages.alert("erro ao salvar o $name");
+      Messages.alert("Erro ao salvar o produto $name");
     } finally {
+      selectedOption = null;
+      selectedDateTime = null;
       Loader.hide();
     }
   }
@@ -91,12 +92,14 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
     try {
       Loader.show();
       await _service.updateItem(
-          item.copyWith(date: selectedDateTime, options: selectedOption));
-      Loader.hide();
-      Modular.to.pop(item);
+        item.copyWith(date: selectedDateTime, options: selectedOption),
+      );
     } catch (e, s) {
       _log.error("Erro ao Atualizar o item", e, s);
       Messages.alert("Erro ao salvar o item ${item.name}");
+    } finally {
+      Loader.hide();
+      Modular.to.pop(item);
     }
   }
 
@@ -104,15 +107,16 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
   Future<String> barcodeScanner() async {
     try {
       final result = await _scanner.barcodeScanner();
+
       if (result != '-1') {
         return result;
       } else {
-        Messages.warning("Codigo de Barra invalido");
+        Messages.warning("Código de barras inválido");
         return '';
       }
     } catch (e, s) {
-      _log.error("Erro ao Scanner Codego de barra", e, s);
-      Messages.alert("Erro ao Scanner codigo de barrar");
+      _log.error("Erro ao escanear código de barras", e, s);
+      Messages.alert("Erro ao escanear código de barras");
       return '';
     }
   }
@@ -133,49 +137,51 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
       await _storage.write<String>(
           Constants.Days_Selected_For_Expiration, days);
       getDaysSelectedForExpiration();
-      Loader.hide();
     } catch (e, s) {
-      _log.error("Erro ao salva os dias para o vencimento", e, s);
-      Messages.alert("Erro ao salva os dias para o vencimento");
+      _log.error("Erro ao salvar os dias para vencimento", e, s);
+      Messages.alert("Erro ao salvar os dias para vencimento");
+    }
+    finally {
+      Loader.hide();
     }
   }
 
   Future<void> _showNotificationForExpiredAndForDowngrading() async {
     try {
-      final result = await _service.getItemAndCheckValidity();
-      result.map(
-        (e) {
-          var resultCheck = Date.checkDate(
-              date: e.date,
-              daysForExpiration:
-                  int.tryParse(daysSelectedForExpiration ?? '10') ?? 10);
-          if (resultCheck == 'rebaixar' && e.showNotification) {
-            _notificationService.showNotification(
-              NotificationModel(
-                id: e.id!,
-                title: "Rebaixar de produto",
-                body: e.name,
-                payload: "payload",
-                color: Colors.yellowAccent,
-              ),
-            );
-            updateShowNotification(item: e);
-          } else if (resultCheck == "vencido") {
-            _notificationService.showNotification(
-              NotificationModel(
-                id: e.id!,
-                title: "Produto Vencido na Loja",
-                body: '\t\t ${e.name}',
-                payload: "payload",
-                color: const Color(0xFFF44336),
-              ),
-            );
-          }
-        },
-      ).toList();
+      final result = await _service.getItemOption(ListOptionsEnum.Rebaixa.name);
+
+      final days = int.tryParse(daysSelectedForExpiration ?? '10') ?? 10;
+
+      for (final e in result) {
+        final resultCheck =
+            Date.checkDate(date: e.date, daysForExpiration: days);
+
+        if (resultCheck == 'rebaixar' && !e.showNotification) {
+          _notificationService.showNotification(
+            NotificationModel(
+              id: e.id!,
+              title: "Rebaixar de produto",
+              body: e.name,
+              payload: "payload",
+              color: Colors.yellowAccent,
+            ),
+          );
+          updateShowNotification(item: e);
+        } else if (resultCheck == "vencido") {
+          _notificationService.showNotification(
+            NotificationModel(
+              id: e.id!,
+              title: "Produto Vencido na Loja",
+              body: '\t\t ${e.name}',
+              payload: "payload",
+              color: const Color(0xFFF44336),
+            ),
+          );
+        }
+      }
     } catch (e, s) {
-      _log.error("Erro ao mostar as Notificações dos itens", e, s);
-      Messages.info("Erro ao mostar as Notificações dos itens");
+      _log.error("Erro ao mostrar as notificações dos itens", e, s);
+      Messages.info("Erro ao mostrar as notificações dos itens");
     }
   }
 
