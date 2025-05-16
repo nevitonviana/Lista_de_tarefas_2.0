@@ -1,19 +1,14 @@
-import '../../core/exception/failure.dart';
 import '../../core/logger/app_logger.dart';
-import '../../core/ui/widgets/date.dart';
 import '../../models/item_model.dart';
-import '../../models/list_options_enum.dart';
 import '../../repositories/sql/sqflite_repository.dart';
 import 'sqflite_service.dart';
 
 class SqfliteServiceImpl implements SqfliteService {
   final SqfliteRepository _repository;
-  final AppLogger _log;
 
   SqfliteServiceImpl(
       {required SqfliteRepository repository, required AppLogger log})
-      : _repository = repository,
-        _log = log;
+      : _repository = repository;
 
   @override
   Future<void> saveItem(ItemModel itemModel) => _repository.saveItem(itemModel);

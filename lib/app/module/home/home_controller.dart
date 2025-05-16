@@ -14,6 +14,7 @@ import '../../core/ui/widgets/messages.dart';
 import '../../models/item_model.dart';
 import '../../models/list_options_enum.dart';
 import '../../models/notification_model.dart';
+import '../../services/api/api_info_barcode_service.dart';
 import '../../services/sql/sqflite_service.dart';
 
 part 'home_controller.g.dart';
@@ -22,7 +23,8 @@ part 'home_controller.g.dart';
 class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store, ControllerLifeCycle {
-  final SqfliteService _service;
+  final SqfliteService _serviceSQL;
+  final ApiInfoBarcodeService _barcodeService;
   final AppLogger _log;
   final BarcodeScanner _scanner;
 
@@ -36,16 +38,18 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
     required BarcodeScanner scanner,
     required LocalStorage storage,
     required NotificationService notificationService,
-  })  : _service = service,
+    required ApiInfoBarcodeService barcodeService,
+  })  : _serviceSQL = service,
         _log = log,
         _scanner = scanner,
         _storage = storage,
-        _notificationService = notificationService;
+        _notificationService = notificationService,
+        _barcodeService = barcodeService;
 
   @override
   Future<void> onReady() async {
-   await  getDaysSelectedForExpiration();
-   await  _showNotificationForExpiredAndForDowngrading();
+    await getDaysSelectedForExpiration();
+    await _showNotificationForExpiredAndForDowngrading();
   }
 
   @observable
@@ -75,7 +79,7 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
         finished: false,
         showNotification: false,
       );
-      await _service.saveItem(item);
+      await _serviceSQL.saveItem(item);
       Messages.success("Salvo com sucesso");
     } catch (e, s) {
       _log.error("Erro ao salvar dados", e, s);
@@ -91,7 +95,7 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
   Future<void> updateItem({required ItemModel item}) async {
     try {
       Loader.show();
-      await _service.updateItem(
+      await _serviceSQL.updateItem(
         item.copyWith(date: selectedDateTime, options: selectedOption),
       );
     } catch (e, s) {
@@ -109,7 +113,7 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
       final result = await _scanner.barcodeScanner();
 
       if (result != '-1') {
-        return result;
+        return 'result';
       } else {
         Messages.warning("Código de barras inválido");
         return '';
@@ -140,15 +144,15 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
     } catch (e, s) {
       _log.error("Erro ao salvar os dias para vencimento", e, s);
       Messages.alert("Erro ao salvar os dias para vencimento");
-    }
-    finally {
+    } finally {
       Loader.hide();
     }
   }
 
   Future<void> _showNotificationForExpiredAndForDowngrading() async {
     try {
-      final result = await _service.getItemOption(ListOptionsEnum.Rebaixa.name);
+      final result =
+          await _serviceSQL.getItemOption(ListOptionsEnum.Rebaixa.name);
 
       final days = int.tryParse(daysSelectedForExpiration ?? '10') ?? 10;
 
@@ -187,10 +191,25 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
 
   Future<void> updateShowNotification({required ItemModel item}) async {
     try {
-      await _service.updateItem(item.copyWith(showNotification: true));
+      await _serviceSQL.updateItem(item.copyWith(showNotification: true));
     } catch (e, s) {
       _log.error("Erro ao atualizar o showNotification", e, s);
       Messages.info("Erro ao atualizar o showNotification");
     }
+  }
+
+  @action
+  Future<String> getInfoBarcode({required String barcode}) async {
+    try {
+      Loader.show();
+      final result = await _barcodeService.getInfoBarcode(barcode: barcode);
+      return result.name;
+    } catch (e, s) {
+      _log.error("Erro ao buscar informações do código de barras", e, s);
+      Messages.info("Erro ao buscar informações do código de barras");
+    } finally {
+      Loader.hide();
+    }
+    return '';
   }
 }
