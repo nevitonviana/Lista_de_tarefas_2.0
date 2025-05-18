@@ -36,10 +36,10 @@ class AppModule extends Module {
     i.addLazySingleton<FlutterShareApp>(FlutterShareAppImpl.new);
     i.addLazySingleton<LocalStorage>(SharedPreferencesLocalStorageImpl.new);
     i.addLazySingleton<NotificationService>(NotificationServiceImpl.new);
+    i.addLazySingleton<RestClient>(DioRestClient.new);
     i.addLazySingleton<ApiInfoBarcodeRepository>(
         ApiInfoBarcodeRepositoryImpl.new);
-    i.addLazySingleton<RestClient>(DioRestClient.new);
-    i.addLazySingleton<ApiInfoBarcodeService>(ApiInfoBarcodeServiceImpl.new);
+    i.add<ApiInfoBarcodeService>(ApiInfoBarcodeServiceImpl.new);
   }
 
   @override

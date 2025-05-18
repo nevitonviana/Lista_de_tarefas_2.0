@@ -200,8 +200,10 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                   widget: 60,
                   onPressed: () async {
                     _barcodeEC.text = await controller.barcodeScanner();
-                    _nameEC.text = await controller.getInfoBarcode(
-                        barcode: "7899638342841");
+                    if (_barcodeEC.text != '') {
+                      _nameEC.text = await controller.getInfoBarcode(
+                          barcode: _barcodeEC.text);
+                    }
                   },
                 ),
                 CustomButton(

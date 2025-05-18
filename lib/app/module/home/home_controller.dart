@@ -203,10 +203,10 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
     try {
       Loader.show();
       final result = await _barcodeService.getInfoBarcode(barcode: barcode);
-      return result.name;
+      return result?.name ?? '';
     } catch (e, s) {
       _log.error("Erro ao buscar informações do código de barras", e, s);
-      Messages.info("Erro ao buscar informações do código de barras");
+      Messages.info('Erro ao buscar informações do código de barras');
     } finally {
       Loader.hide();
     }

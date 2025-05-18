@@ -9,45 +9,23 @@ class BarcodeModel {
     this.thumbnail,
   });
 
-  BarcodeModel copyWith({
-    String? name,
-    String? barcode,
-    String? thumbnail,
-
-  }) {
-    return BarcodeModel(
-      name: name ?? this.name,
-      barcode: barcode ?? this.barcode,
-      thumbnail: thumbnail ?? this.thumbnail,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'barcode': barcode,
-      'thumbnail': thumbnail,
-    };
-  }
-
   factory BarcodeModel.fromMap(Map<String, dynamic> map) {
-    return BarcodeModel(
-      name: map['description'] ?? '',
-      barcode: map['gtin']?.toString() ?? '',
-      thumbnail: map['thumbnail']?.toString(),
-    );
+    if (map.containsKey('gtin') && map.containsKey('description')) {
+      // 🔹 BlueSoft
+      return BarcodeModel(
+        name: map['description'] ?? '',
+        barcode: map['gtin']?.toString() ?? '',
+        thumbnail: map['thumbnail'] ?? '',
+      );
+    } else if (map.containsKey('product_name') && map.containsKey('code')) {
+      // 🔸 OpenFoodFacts
+      return BarcodeModel(
+        name: map['product_name_pt'] ?? map['product_name'] ?? '',
+        barcode: map['code']?.toString() ?? '',
+        thumbnail: map['image_thumb_url'] ?? '',
+      );
+    } else {
+      throw ArgumentError('Formato de dados desconhecido para BarcodeModel');
+    }
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          (other is BarcodeModel &&
-              runtimeType == other.runtimeType &&
-              name == other.name &&
-              barcode == other.barcode &&
-              thumbnail == other.thumbnail);
-
-  @override
-  int get hashCode =>
-      name.hashCode ^ barcode.hashCode ^ thumbnail.hashCode;
 }

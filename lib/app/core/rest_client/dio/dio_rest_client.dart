@@ -7,32 +7,38 @@ import '../rest_client_exception.dart';
 import '../rest_client_response.dart';
 
 class DioRestClient implements RestClient {
+  final AppLogger log;
   late final Dio _dio;
+  late String _baseUrl;
+  late Map<String, String> _headers;
 
-  DioRestClient({required AppLogger log, BaseOptions? baseOptions}) {
-    _dio = _createDio(baseOptions ?? _defaultOptions);
+  DioRestClient({required this.log, BaseOptions? baseOptions})
+      : _dio = Dio(baseOptions ?? BaseOptions()) {
+    _dio.interceptors.add(
+      LogInterceptor(
+        requestBody: false,
+        responseBody: false,
+      ),
+    );
+    _dio.options.validateStatus = (status) => status! < 500;
   }
 
-  Dio _createDio(BaseOptions options) {
-    final dio = Dio(options);
-    dio.interceptors
-        .add(LogInterceptor(requestBody: false, responseBody: false));
-    return dio;
-  }
-
-  final _defaultOptions = BaseOptions(
-    baseUrl: ApiConstants.baseUrl,
-    headers: {
+  @override
+  RestClient auth() {
+    _baseUrl = ApiConstants.baseUrlBlueSoft;
+    _headers = {
       'X-Cosmos-Token': ApiConstants.apiToken,
       'Accept': 'application/json',
-    },
-  );
+    };
+    return this;
+  }
 
   @override
-  RestClient auth() => this;
-
-  @override
-  RestClient unauth() => this;
+  RestClient unauth() {
+    _baseUrl = ApiConstants.baseUrlOpenFoodFacts;
+    _headers = {};
+    return this;
+  }
 
   @override
   Future<RestClientResponse<T>> get<T>(
@@ -42,35 +48,35 @@ class DioRestClient implements RestClient {
   }) async {
     try {
       final response = await _dio.get(
-        path,
+        '$_baseUrl$path',
         queryParameters: queryParameters,
-        options: Options(headers: {..._defaultOptions.headers, ...?headers}),
+        options: Options(headers: {..._headers, ...?headers}),
       );
       return _dioResponseConverter(response);
     } on DioException catch (e) {
       _throwRestClientException(e);
     }
   }
+}
 
-  Future<RestClientResponse<T>> _dioResponseConverter<T>(
-      Response response) async {
-    return RestClientResponse(
-      data: response.data,
-      statusCode: response.statusCode,
-      statusMessage: response.statusMessage,
-    );
-  }
+Future<RestClientResponse<T>> _dioResponseConverter<T>(
+    Response response) async {
+  return RestClientResponse(
+    data: response.data,
+    statusCode: response.statusCode,
+    statusMessage: response.statusMessage,
+  );
+}
 
-  Never _throwRestClientException(DioException e) {
-    throw RestClientException(
-      error: e.error,
-      message: e.message,
+Never _throwRestClientException(DioException e) {
+  throw RestClientException(
+    error: e.error,
+    message: e.message,
+    statusCode: e.response?.statusCode,
+    response: RestClientResponse(
+      data: e.response?.data,
       statusCode: e.response?.statusCode,
-      response: RestClientResponse(
-        data: e.response?.data,
-        statusCode: e.response?.statusCode,
-        statusMessage: e.response?.statusMessage,
-      ),
-    );
-  }
+      statusMessage: e.response?.statusMessage,
+    ),
+  );
 }

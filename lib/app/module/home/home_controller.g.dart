@@ -74,6 +74,15 @@ mixin _$HomeController on _HomeControllerBase, Store {
     return _$barcodeScannerAsyncAction.run(() => super.barcodeScanner());
   }
 
+  late final _$getInfoBarcodeAsyncAction =
+      AsyncAction('_HomeControllerBase.getInfoBarcode', context: context);
+
+  @override
+  Future<String> getInfoBarcode({required String barcode}) {
+    return _$getInfoBarcodeAsyncAction
+        .run(() => super.getInfoBarcode(barcode: barcode));
+  }
+
   @override
   String toString() {
     return '''

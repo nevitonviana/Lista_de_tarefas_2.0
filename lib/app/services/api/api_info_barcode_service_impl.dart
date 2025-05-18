@@ -1,14 +1,37 @@
+import '../../core/exception/failure.dart';
+import '../../core/logger/app_logger.dart';
 import '../../models/barcode_model.dart';
 import '../../repositories/api/api_info_barcode_repository.dart';
 import 'api_info_barcode_service.dart';
 
 class ApiInfoBarcodeServiceImpl implements ApiInfoBarcodeService {
-  final ApiInfoBarcodeRepository _repository;
+  final ApiInfoBarcodeRepository _repositoryApi;
+  final AppLogger _log;
 
-  ApiInfoBarcodeServiceImpl({required ApiInfoBarcodeRepository repository})
-      : _repository = repository;
+  ApiInfoBarcodeServiceImpl(
+      {required ApiInfoBarcodeRepository repositoryApi, required AppLogger log})
+      : _repositoryApi = repositoryApi,
+        _log = log;
 
   @override
-  Future<BarcodeModel> getInfoBarcode({required String barcode}) =>
-      _repository.getInfoBarcode(barcode: barcode);
+  Future<BarcodeModel?> getInfoBarcode({required String barcode}) async {
+    try {
+      final openFoodResp =
+          await _repositoryApi.getInfoBarcodeOpenFoodFacts(barcode: barcode);
+      if (openFoodResp != null && openFoodResp.name != '') {
+        return openFoodResp;
+      }
+      final blueSoftResp =
+          await _repositoryApi.getInfoBarcodeBlueSoft(barcode: barcode);
+      if (blueSoftResp != null && blueSoftResp.name != '') {
+        print('blueSoftResp: ${blueSoftResp.name}');
+        return blueSoftResp;
+      }
+
+      return null;
+    } catch (e, s) {
+      _log.error('Erro ao buscar informações do código de barras', e, s);
+      throw Failure(message: e.toString());
+    }
+  }
 }
