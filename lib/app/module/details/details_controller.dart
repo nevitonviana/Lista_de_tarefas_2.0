@@ -46,6 +46,11 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     getDaysSelectedForExpiration();
   }
 
+  @override
+  void dispose() {
+    markedForSharing.clear();
+  }
+
   @observable
   ObservableList<ItemModel> listItems = ObservableList<ItemModel>();
 
@@ -117,8 +122,8 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
                   '10') ??
           10;
     } catch (e, s) {
-      _log.error("Erro ao buscar o dias ", e, s);
-      Messages.alert("Erro ao buscar o dias ");
+      _log.error("Erro ao buscar os dias", e, s);
+      Messages.alert("Erro ao buscar os dias ");
     } finally {
       Loader.hide();
     }
@@ -155,13 +160,22 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
 
   Future<void> shareListItem() async {
     try {
-      _shareApp.shareListItem(markedForSharing);
-      markedForSharing.clear();
+      final newListItems =
+          markedForSharing.map((e) => _checkEmptyField(item: e)).toList();
+      await _shareApp.shareListItem(newListItems);
     } catch (e, s) {
       _log.error("Erro ao compartilhar itens", e, s);
       Messages.alert("Erro ao compartilhar itens");
-    }finally{
-      markedForSharing.clear();
+    } finally {
+      // markedForSharing.clear();
     }
+  }
+
+  ItemModel _checkEmptyField({required ItemModel item}) {
+    final description = item.description?.isNotEmpty == true
+        ? item.description
+        : '~Sem descrição~';
+    final quantity = item.quantity?.isNotEmpty == true ? item.quantity : '1';
+    return item.copyWith(description: description, quantity: quantity);
   }
 }

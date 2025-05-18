@@ -83,9 +83,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
           : AppBar(
               title: const Text(
                 'Home',
-                style: TextStyle(
-
-                ),
+                style: TextStyle(),
               ),
               centerTitle: true,
               actions: [
@@ -202,6 +200,10 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                   widget: 60,
                   onPressed: () async {
                     _barcodeEC.text = await controller.barcodeScanner();
+                    if (_barcodeEC.text != '') {
+                      _nameEC.text = await controller.getInfoBarcode(
+                          barcode: _barcodeEC.text);
+                    }
                   },
                 ),
                 CustomButton(

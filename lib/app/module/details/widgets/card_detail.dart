@@ -48,9 +48,9 @@ class _CardDetail extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
         ),
         child: Container(
-          color:  isIndicatorByColor
+          color: isIndicatorByColor
               ? Date.indicatorByColor(
-              date: date, daysForExpiration: daysForExpiration)
+                  date: date, daysForExpiration: daysForExpiration)
               : Colors.white,
           child: Container(
             color: isSelectable ? Colors.grey : Colors.transparent,
@@ -62,11 +62,16 @@ class _CardDetail extends StatelessWidget {
                   visible: isSelectable,
                   child: Checkbox(value: selectedCard, onChanged: onChanged),
                 ),
-                Text(
-                  name,
-                  style: const TextStyle(fontSize: 18),
+                Expanded(
+                  child: Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      overflow: TextOverflow.clip,
+                    ),
+                  ),
                 ),
-                const Spacer(),
+                // const Spacer(),
                 Text(
                   Date.format(date),
                   style: const TextStyle(fontSize: 20),

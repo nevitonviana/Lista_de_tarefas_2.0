@@ -14,7 +14,11 @@ class BarcodeScannerImpl implements BarcodeScanner {
   Future<String> barcodeScanner() async {
     try {
       return await FlutterBarcodeScanner.scanBarcode(
-          'red', "Cancelar", false, ScanMode.BARCODE);
+        'red',
+        "Cancelar",
+        false,
+        ScanMode.BARCODE,
+      );
     } catch (e, s) {
       _log.error("Erro ao escaniar codigo", e, s);
       throw const Failure(message: "Erro ao Scanner codigo");
