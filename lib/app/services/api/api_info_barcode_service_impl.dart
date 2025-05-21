@@ -1,5 +1,6 @@
 import '../../core/exception/failure.dart';
 import '../../core/logger/app_logger.dart';
+import '../../core/rest_client/rest_client_exception.dart';
 import '../../models/barcode_model.dart';
 import '../../repositories/api/api_info_barcode_repository.dart';
 import 'api_info_barcode_service.dart';
@@ -21,17 +22,17 @@ class ApiInfoBarcodeServiceImpl implements ApiInfoBarcodeService {
       if (openFoodResp != null && openFoodResp.name != '') {
         return openFoodResp;
       }
+
       final blueSoftResp =
           await _repositoryApi.getInfoBarcodeBlueSoft(barcode: barcode);
       if (blueSoftResp != null && blueSoftResp.name != '') {
-        print('blueSoftResp: ${blueSoftResp.name}');
         return blueSoftResp;
       }
 
       return null;
-    } catch (e, s) {
+    } on RestClientException catch (e, s) {
       _log.error('Erro ao buscar informações do código de barras', e, s);
-      throw Failure(message: e.toString());
+      throw Failure(message: e.response.toString());
     }
   }
 }

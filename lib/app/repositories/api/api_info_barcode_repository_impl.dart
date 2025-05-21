@@ -1,5 +1,3 @@
-import 'package:dio/dio.dart';
-
 import '../../core/exception/failure.dart';
 import '../../core/logger/app_logger.dart';
 import '../../core/rest_client/rest_client.dart';
@@ -31,14 +29,13 @@ class ApiInfoBarcodeRepositoryImpl implements ApiInfoBarcodeRepository {
                   'Requisição excede a quantidade máxima de chamadas permitidas à API;');
         case 404:
           throw const Failure(
-              message: 'Produto não encontrado na base de dados;');
+              message: 'Produto não encontrado na base de dados2;');
         case 413:
           throw const Failure(
               message: 'Requisição excede o tamanho máximo permitido;');
         default:
-          const Failure(
+          throw const Failure(
               message: 'Erro ao buscar informações do código de barras');
-          return null;
       }
     } on RestClientException catch (e, s) {
       if (e.statusCode == 413) {
@@ -47,22 +44,12 @@ class ApiInfoBarcodeRepositoryImpl implements ApiInfoBarcodeRepository {
       }
       if (e.statusCode == 404) {
         throw const Failure(
-            message: 'Produto não encontrado na base de dados;');
+            message: 'Produto não encontrado na base de dados1;');
       }
       _log.error('Erro ao buscar informações do código de barras', e, s);
       throw Failure(
           message:
               e.message ?? 'Erro ao buscar informações do código de barras');
-    } on DioException catch (e, s) {
-      _log.error('Erro ao converter resposta da API', e, s);
-      throw const Failure(
-          message: 'Erro ao buscar informações do código de barras');
-    } on Exception catch (e, s) {
-      _log.error(
-          'Erro desconhecido ao buscar informações do código de barras', e, s);
-      throw const Failure(
-          message:
-              'Erro desconhecido ao buscar informações do código de barras');
     }
   }
 
@@ -76,21 +63,16 @@ class ApiInfoBarcodeRepositoryImpl implements ApiInfoBarcodeRepository {
         final product = await response.data['product'];
         return BarcodeModel.fromMap(product);
       }
-
       return null;
     } on RestClientException catch (e, s) {
       if (e.statusCode == 404) {
         throw const Failure(
-            message: 'Produto nao encontrado na base de dados;');
+            message: 'Produto nao encontrado na base de dados3;');
       }
       _log.error('Erro ao buscar informações do código de barras', e, s);
       throw Failure(
           message:
               e.message ?? 'Erro ao buscar informações do código de barras');
-    } catch (e, s) {
-      _log.error('Erro ao converter resposta da API', e, s);
-      throw const Failure(
-          message: 'Erro ao buscar informações do código de barras');
     }
   }
 }

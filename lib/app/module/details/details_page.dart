@@ -63,7 +63,7 @@ class _DetailsPageState
                             setState(
                               () {
                                 _selectionMode = false;
-                                controller.markedForSharing.clear();
+                                controller.listMarkedForSharing.clear();
                               },
                             );
                           },
@@ -94,13 +94,23 @@ class _DetailsPageState
                         controller.listItems.isNotEmpty && widget._name != null,
                     child: IconButton(
                       onPressed: () {
-                        DialogCustom(context).dialogDelete(
-                          onPressedDelete: () {
-                            controller.deleteAllItems(
-                                optionOfDeletes: widget._name!);
-                          },
-                          label: ' todos os itens de ${widget._name}',
-                        );
+                        if (!_selectionMode) {
+                          DialogCustom(context).dialogDelete(
+                            onPressedDelete: () {
+                              controller.deleteAllItems(
+                                  optionOfDeletes: widget._name!);
+                            },
+                            label: ' todos os itens de ${widget._name}',
+                          );
+                        } else {
+                          DialogCustom(context).dialogDelete(
+                            onPressedDelete: () {
+                              controller.deleteItemList();
+                            },
+                            label: ' a lista selecionada',
+                          );
+                          _selectionMode = false;
+                        }
                       },
                       icon: const Icon(
                         Icons.delete,
@@ -144,51 +154,48 @@ class _DetailsPageState
                           }
                           return false;
                         },
-                        child: Observer(
-                          builder: (context) {
-                            return _CardDetail(
-                              onTap: _selectionMode
-                                  ? null
-                                  : () async {
-                                      await Modular.to.pushNamed(
-                                          '/details/detailsItem',
-                                          arguments: item);
-                                      widget._searchItem == null
-                                          ? await controller.getItems(item.options)
-                                          : controller.searchItemNameOrBarcode(
-                                              search: widget._searchItem!);
-                                    },
-                              onChanged: (value) {
-
-                                  controller.brandToShare(item: item);
-                                  _selectionMode =
-                                      controller.markedForSharing.isNotEmpty;
-
-                              },
-                              onDoubleTap: () {
-                                final updatedItem =
-                                    item.copyWith(finished: !item.finished);
-                                controller.updateFinished(item: updatedItem);
-                              },
-                              onLongPress: () {
-                                _selectionMode = true;
-                                setState(() {
-                                  controller.brandToShare(item: item);
-                                });
-                              },
-                              isSelectable: _selectionMode,
-                              selectedCard: controller.isItemSelected(item),
-                              isRebaixa: item.finished,
-                              name: item.name,
-                              date: item.date,
-                              isIndicatorByColor:
-                                  item.options == ListOptionsEnum.Rebaixa.name &&
-                                      widget._searchItem == null,
-                              daysForExpiration:
-                                  controller.daysSelectedForExpiration,
-                            );
-                          }
-                        ),
+                        child: Observer(builder: (context) {
+                          return _CardDetail(
+                            onTap: _selectionMode
+                                ? null
+                                : () async {
+                                    await Modular.to.pushNamed(
+                                        '/details/detailsItem',
+                                        arguments: item);
+                                    widget._searchItem == null
+                                        ? await controller
+                                            .getItems(item.options)
+                                        : controller.searchItemNameOrBarcode(
+                                            search: widget._searchItem!);
+                                  },
+                            onChanged: (value) {
+                              controller.brandToShare(item: item);
+                              _selectionMode =
+                                  controller.listMarkedForSharing.isNotEmpty;
+                            },
+                            onDoubleTap: () {
+                              final updatedItem =
+                                  item.copyWith(finished: !item.finished);
+                              controller.updateFinished(item: updatedItem);
+                            },
+                            onLongPress: () {
+                              _selectionMode = true;
+                              setState(() {
+                                controller.brandToShare(item: item);
+                              });
+                            },
+                            isSelectable: _selectionMode,
+                            selectedCard: controller.isItemSelected(item),
+                            isRebaixa: item.finished,
+                            name: item.name,
+                            date: item.date,
+                            isIndicatorByColor:
+                                item.options == ListOptionsEnum.Rebaixa.name &&
+                                    widget._searchItem == null,
+                            daysForExpiration:
+                                controller.daysSelectedForExpiration,
+                          );
+                        }),
                       ),
                     );
                   },

@@ -20,6 +20,7 @@ class CalendarButton extends StatelessWidget {
     var lastDate = DateTime.now();
     lastDate = lastDate.add(const Duration(days: 10 * 365));
     controller.selectedDateTime = await showDatePicker(
+      locale: const Locale('pt', 'BR'),
       initialDate: controller.selectedDateTime ?? DateTime.now(),
       context: context,
       firstDate: DateTime(2000),

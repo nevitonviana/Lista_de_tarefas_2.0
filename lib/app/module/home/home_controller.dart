@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../core/barcode/barcode_scanner/barcode_scanner.dart';
+import '../../core/exception/failure.dart';
 import '../../core/helpers/constants.dart';
 import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/local_storage/local_storage.dart';
@@ -16,6 +17,7 @@ import '../../models/list_options_enum.dart';
 import '../../models/notification_model.dart';
 import '../../services/api/api_info_barcode_service.dart';
 import '../../services/sql/sqflite_service.dart';
+import 'widgets/calendar_button.dart';
 
 part 'home_controller.g.dart';
 
@@ -113,7 +115,7 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
       final result = await _scanner.barcodeScanner();
 
       if (result != '-1') {
-        return 'result';
+        return result;
       } else {
         Messages.warning("Código de barras inválido");
         return '';
@@ -204,12 +206,13 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
       Loader.show();
       final result = await _barcodeService.getInfoBarcode(barcode: barcode);
       return result?.name ?? '';
-    } catch (e, s) {
+    } on Failure catch (e, s) {
       _log.error("Erro ao buscar informações do código de barras", e, s);
-      Messages.info('Erro ao buscar informações do código de barras');
+      Messages.info(e.message);
     } finally {
       Loader.hide();
     }
     return '';
   }
+
 }

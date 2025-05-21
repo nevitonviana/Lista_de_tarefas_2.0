@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 
+import '../../core/exception/failure.dart';
 import '../../core/helpers/constants.dart';
 import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/local_storage/local_storage.dart';
@@ -48,7 +49,7 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
 
   @override
   void dispose() {
-    markedForSharing.clear();
+    listMarkedForSharing.clear();
   }
 
   @observable
@@ -61,9 +62,9 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   ItemModel? itemFinished;
 
   @observable
-  ObservableList<ItemModel> markedForSharing = ObservableList();
+  ObservableList<ItemModel> listMarkedForSharing = ObservableList();
 
-  bool isItemSelected(ItemModel item) => markedForSharing.contains(item);
+  bool isItemSelected(ItemModel item) => listMarkedForSharing.contains(item);
 
   @action
   Future<void> getItems(String name) async {
@@ -81,12 +82,14 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   Future<void> deleteItem({required int id}) async {
     try {
       Loader.show();
-      await _service.deleteItem(id);
       listItems.removeWhere((item) => item.id == id);
+      await _service.deleteItem(id);
       Loader.hide();
     } catch (e, s) {
       _log.error("erro ao deleta o item", e, s);
       Messages.alert("Erro ao deleta o item");
+    } finally {
+      Loader.hide();
     }
   }
 
@@ -100,6 +103,21 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
     } catch (e, s) {
       _log.error("Erro ao deleta todos os itens ", e, s);
       Messages.alert('Erro ao deleta todos os itens de $optionOfDeletes');
+    }
+  }
+
+  @action
+  Future<void> deleteItemList() async {
+    try {
+      Loader.show();
+      for (var item in listMarkedForSharing) {
+        await deleteItem(id: item.id!);
+      }
+    } on Failure catch (e, s) {
+      _log.error("Erro ao deletar lista", e, s);
+      Messages.alert(e.message);
+    } finally {
+      Loader.hide();
     }
   }
 
@@ -147,10 +165,10 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   @alwaysNotify
   Future<void> brandToShare({required ItemModel item}) async {
     try {
-      if (markedForSharing.contains(item)) {
-        markedForSharing.remove(item);
+      if (listMarkedForSharing.contains(item)) {
+        listMarkedForSharing.remove(item);
       } else {
-        markedForSharing.add(item);
+        listMarkedForSharing.add(item);
       }
     } catch (e, s) {
       _log.error("Erro ao marcar para compartilhar", e, s);
@@ -161,7 +179,7 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   Future<void> shareListItem() async {
     try {
       final newListItems =
-          markedForSharing.map((e) => _checkEmptyField(item: e)).toList();
+          listMarkedForSharing.map((e) => _checkEmptyField(item: e)).toList();
       await _shareApp.shareListItem(newListItems);
     } catch (e, s) {
       _log.error("Erro ao compartilhar itens", e, s);

@@ -142,7 +142,6 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                 ),
                 Observer(
                   builder: (_) {
-                    // Midiaquery TODO
                     return Visibility(
                       visible: controller.selectedOption ==
                           ListOptionsEnum.Outros.name,

@@ -61,6 +61,8 @@ dependencies:
   flutter:
 
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
 
 
@@ -141,6 +143,7 @@ flutter:
   assets:
     - assets/icon/
   #   - images/a_dot_ham.jpeg
+
 
 
 flutter_native_splash:
