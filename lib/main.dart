@@ -6,7 +6,7 @@ import 'app_module.dart';
 import 'app_widget.dart';
 
 Future<void> main() async {
-  await ApplicationConfig().configureApp();
+   ApplicationConfig().configureApp();
   runApp(
     ModularApp(
       module: AppModule(),

@@ -1,10 +1,11 @@
 import '../../models/item_model.dart';
 
-abstract class SqfliteRepository
- {
+abstract class SqfliteRepository {
   Future<void> saveItem(ItemModel itemModel);
 
   Future<List<ItemModel>> getItemOption(String option);
+
+  Future<ItemModel?> findByBarcode(String barcode);
 
   Future<List<ItemModel>> searchItemBarcodeOrName(String search);
 

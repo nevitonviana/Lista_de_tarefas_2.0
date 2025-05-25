@@ -39,7 +39,7 @@ class AppModule extends Module {
     i.addLazySingleton<RestClient>(DioRestClient.new);
     i.addLazySingleton<ApiInfoBarcodeRepository>(
         ApiInfoBarcodeRepositoryImpl.new);
-    i.add<ApiInfoBarcodeService>(ApiInfoBarcodeServiceImpl.new);
+    i.addLazySingleton<ApiInfoBarcodeService>(ApiInfoBarcodeServiceImpl.new);
   }
 
   @override

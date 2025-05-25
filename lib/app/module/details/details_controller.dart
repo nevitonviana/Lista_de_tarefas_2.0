@@ -36,7 +36,7 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   Future<void> onInit([Map<String, dynamic>? params]) async {
     if (params?['name'] != null) {
       await getItems(params?['name']);
-    } else {
+    } else if (params?['searchItem'] != null && params?['searchItem'] != '') {
       searchItemNameOrBarcode(search: params?['searchItem'] ?? '');
     }
   }
@@ -135,10 +135,8 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   Future<void> getDaysSelectedForExpiration() async {
     try {
       Loader.show();
-      daysSelectedForExpiration = int.tryParse(
-              await _storage.read(Constants.Days_Selected_For_Expiration) ??
-                  '10') ??
-          10;
+      daysSelectedForExpiration =
+          int.tryParse(await _storage.read(Constants.Days_Selected_For_Expiration) ?? '10') ?? 10;
     } catch (e, s) {
       _log.error("Erro ao buscar os dias", e, s);
       Messages.alert("Erro ao buscar os dias ");
@@ -178,8 +176,7 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
 
   Future<void> shareListItem() async {
     try {
-      final newListItems =
-          listMarkedForSharing.map((e) => _checkEmptyField(item: e)).toList();
+      final newListItems = listMarkedForSharing.map((e) => _checkEmptyField(item: e)).toList();
       await _shareApp.shareListItem(newListItems);
     } catch (e, s) {
       _log.error("Erro ao compartilhar itens", e, s);
@@ -190,9 +187,7 @@ abstract class DetailsControllerBase with Store, ControllerLifeCycle {
   }
 
   ItemModel _checkEmptyField({required ItemModel item}) {
-    final description = item.description?.isNotEmpty == true
-        ? item.description
-        : '~Sem descrição~';
+    final description = item.description?.isNotEmpty == true ? item.description : '~Sem descrição~';
     final quantity = item.quantity?.isNotEmpty == true ? item.quantity : '1';
     return item.copyWith(description: description, quantity: quantity);
   }

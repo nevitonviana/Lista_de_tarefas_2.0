@@ -17,19 +17,20 @@ class ApiInfoBarcodeServiceImpl implements ApiInfoBarcodeService {
   @override
   Future<BarcodeModel?> getInfoBarcode({required String barcode}) async {
     try {
-      final openFoodResp =
-          await _repositoryApi.getInfoBarcodeOpenFoodFacts(barcode: barcode);
-      if (openFoodResp != null && openFoodResp.name != '') {
-        return openFoodResp;
-      }
+      final openFoodResp = await _repositoryApi.getInfoBarcodeOpenFoodFacts(barcode: barcode);
 
-      final blueSoftResp =
-          await _repositoryApi.getInfoBarcodeBlueSoft(barcode: barcode);
-      if (blueSoftResp != null && blueSoftResp.name != '') {
-        return blueSoftResp;
-      }
-
-      return null;
+      return openFoodResp.when(
+        (success) => success,
+        (error) async {
+          final blueSoftResp = await _repositoryApi.getInfoBarcodeBlueSoft(barcode: barcode);
+          return blueSoftResp.when(
+            (success) => success,
+            (error) => throw Failure(
+              message: error.toString(),
+            ),
+          );
+        },
+      );
     } on RestClientException catch (e, s) {
       _log.error('Erro ao buscar informações do código de barras', e, s);
       throw Failure(message: e.response.toString());

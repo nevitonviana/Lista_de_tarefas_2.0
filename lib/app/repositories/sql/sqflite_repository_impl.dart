@@ -30,32 +30,28 @@ class SqfliteRepositoryImpl implements SqfliteRepository {
   Future<List<ItemModel>> getItemOption(String option) async {
     try {
       final conn = await _sqliteConnection.openConnection();
-      final result = await conn
-          .rawQuery('SELECT * FROM ${Constants.NAME_BD} WHERE options = ? order by date ASC ', [option]);
+      final result = await conn.rawQuery(
+          'SELECT * FROM ${Constants.NAME_BD} WHERE options = ? order by date ASC ', [option]);
       return result.map((e) => ItemModel.fromMap(e)).toList();
     } on Failure catch (e, s) {
-      _log.error("erro ao buscar os dados", e, s);
-      throw const Failure(message: "Erro ao buscar dados");
+      _log.error("Erro ao buscar os itens", e, s);
+      throw const Failure(message: "Erro ao buscar os itens");
     }
   }
 
   @override
   Future<List<ItemModel>> searchItemBarcodeOrName(String search) async {
     try {
-      List<ItemModel> resultList = [];
       final conn = await _sqliteConnection.openConnection();
-      final result = await conn.query(Constants.NAME_BD);
-      result.map<ItemModel>((e) => ItemModel.fromMap(e)).forEach(
-        (element) {
-          if (element.name.contains(search) || element.barcode.contains(search)) {
-            resultList.add(element);
-          }
-        },
+      final result = await conn.query(
+        Constants.NAME_BD,
+        where: 'name LIKE ? OR barcode LIKE ?',
+        whereArgs: ['%$search%', '%$search%'],
       );
-      return resultList;
+      return result.map((e) => ItemModel.fromMap(e)).toList();
     } on Failure catch (e, s) {
-      _log.error("erro ao busca o itens", e, s);
-      throw const Failure(message: "erro ao busca os itens");
+      _log.error("Erro ao buscar os itens", e, s);
+      throw const Failure(message: "Erro ao buscar os itens");
     }
   }
 
@@ -63,7 +59,8 @@ class SqfliteRepositoryImpl implements SqfliteRepository {
   Future<void> updateItem(ItemModel itemModel) async {
     try {
       final conn = await _sqliteConnection.openConnection();
-      await conn.update(Constants.NAME_BD, itemModel.toMap(), where: 'id = ?', whereArgs: [itemModel.id]);
+      await conn
+          .update(Constants.NAME_BD, itemModel.toMap(), where: 'id = ?', whereArgs: [itemModel.id]);
     } on Failure catch (e, s) {
       _log.error("error ao atualizar o item", e, s);
       throw const Failure(message: "Erro ao atualizar o Item");
@@ -87,8 +84,29 @@ class SqfliteRepositoryImpl implements SqfliteRepository {
       final conn = await _sqliteConnection.openConnection();
       await conn.delete(Constants.NAME_BD, where: "id = ?", whereArgs: [id]);
     } on Failure catch (e, s) {
-      _log.error("erro ao deleta o item", e, s);
+      _log.error("Erro ao deletar item no banco de dados", e, s);
       throw const Failure(message: "error ao deleta o item");
+    }
+  }
+
+  @override
+  Future<ItemModel?> findByBarcode(String barcode) async {
+    try {
+      final conn = await _sqliteConnection.openConnection();
+      final result = await conn.query(
+        Constants.NAME_BD,
+        where: 'barcode = ?',
+        whereArgs: [barcode],
+        limit: 1,
+      );
+
+      if (result.isNotEmpty) {
+        return ItemModel.fromMap(result.first);
+      }
+      return null;
+    } on Failure catch (e, s) {
+      _log.error("Erro ao buscar item por código de barras", e, s);
+      throw const Failure(message: "Erro ao buscar item por código de barras");
     }
   }
 }

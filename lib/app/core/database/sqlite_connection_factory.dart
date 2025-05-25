@@ -22,28 +22,33 @@ class SqliteConnectionFactory {
   }
 
   Future<Database> openConnection() async {
-    if (_db == null) {
-      await _lock.synchronized(
-        () async {
-          if (_db == null) {
-            final databasePath = await getDatabasesPath();
-            final pathDatabase = join(databasePath, _databaseName);
-            _db = await openDatabase(
-              pathDatabase,
-              version: _version,
-              onConfigure: _onConfigure,
-              onCreate: _onCreate,
-              onUpgrade: _onUpgrade,
-            );
-          }
-        },
-      );
+    try {
+      if (_db == null) {
+        await _lock.synchronized(
+          () async {
+            if (_db == null) {
+              final databasePath = await getDatabasesPath();
+              final pathDatabase = join(databasePath, _databaseName);
+              _db = await openDatabase(
+                pathDatabase,
+                version: _version,
+                onConfigure: _onConfigure,
+                onCreate: _onCreate,
+                onUpgrade: _onUpgrade,
+              );
+            }
+          },
+        );
+      }
+      return _db!;
+    } catch (e) {
+      throw Exception("Erro ao abrir a conexão com o banco de dados");
     }
-    return _db!;
   }
 
   Future<void> _onConfigure(Database db) async {
     await db.execute("PRAGMA foreign_keys = ON");
+    // await db.execute("PRAGMA journal_mode = WAL");
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -65,7 +70,12 @@ class SqliteConnectionFactory {
   }
 
   void closeConnection() {
-    _db?.close();
-    _db = null;
+    try {
+      _db?.close();
+    } catch (e) {
+      throw Exception("Erro ao fechar a conexão com o banco de dados");
+    } finally {
+      _db = null;
+    }
   }
 }

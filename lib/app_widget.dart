@@ -4,7 +4,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 import 'app/core/ui/ui_config.dart';
 
 class AppWidget extends StatelessWidget {
@@ -17,6 +16,7 @@ class AppWidget extends StatelessWidget {
       designSize: const Size(390, 844),
       builder: (_, __) {
         return MaterialApp.router(
+          // showPerformanceOverlay: true,
           title: UiConfig.title,
           theme: UiConfig.theme,
           routerConfig: Modular.routerConfig,
@@ -26,7 +26,6 @@ class AppWidget extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-
           builder: (context, child) {
             return Asuka.builder(context, child);
           },

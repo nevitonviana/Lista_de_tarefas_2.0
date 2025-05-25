@@ -10,12 +10,21 @@ class StartPageController = StartPageControllerBase with _$StartPageController;
 abstract class StartPageControllerBase with Store, ControllerLifeCycle {
   final pageViewController = PageController();
 
+  @observable
+  int currentPageIndex = 0;
+
+  @action
+  void setCurrentPageIndex(int index) {
+    currentPageIndex = index;
+  }
+
   @override
   void onInit([Map<String, dynamic>? params]) {}
 
   @override
   void dispose() {
-    super.dispose();
     pageViewController.dispose();
+    super.dispose();
   }
 }
+

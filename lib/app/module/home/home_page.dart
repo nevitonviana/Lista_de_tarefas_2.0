@@ -65,7 +65,12 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
   @override
   void initState() {
     super.initState();
-    _updateItem();
+    // final start = DateTime.now();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateItem();
+      // final duration = DateTime.now().difference(start);
+      // debugPrint("⏱ Tempo até renderização: ${duration.inMilliseconds}ms");
+    });
   }
 
   @override
@@ -92,12 +97,14 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                   child: IconButton(
                     onPressed: () {
                       DialogCustom(context: context).showSearch(
-                        onPressedIcon: () async =>
-                            _nameEC.text = await controller.barcodeScanner(),
+                        onPressedIcon: () async => _nameEC.text = await controller.barcodeScanner(),
                         controller: _nameEC,
                         onPressed: () async {
-                          await Modular.to.pushNamed(
-                              "/details/details?searchItem=${_nameEC.text}");
+                          if (_nameEC.text == '') {
+                            Messages.warning("Código de barras ou nome do produto inválido");
+                            return;
+                          }
+                          await Modular.to.pushNamed("/details/details?searchItem=${_nameEC.text}");
                           _nameEC.clear();
                         },
                       );
@@ -136,15 +143,15 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                 CustomTextFormField(
                   controller: _quantityEC,
                   label: "Quantidade/Kg",
-                  textInputType: const TextInputType.numberWithOptions(
-                      decimal: true, signed: false),
+                  textInputType:
+                      const TextInputType.numberWithOptions(decimal: true, signed: false),
                   icon: Icons.numbers_sharp,
                 ),
                 Observer(
                   builder: (_) {
                     return Visibility(
-                      visible: controller.selectedOption ==
-                          ListOptionsEnum.Outros.name,
+                      visible: controller.selectedOption == ListOptionsEnum.Outros.name ||
+                          controller.selectedOption == ListOptionsEnum.Transformar.name,
                       child: CustomTextFormField(
                         textInputType: TextInputType.multiline,
                         controller: _descriptionEC,
@@ -169,15 +176,13 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                             iconSize: 30,
                             padding: const EdgeInsets.only(left: 10),
                             value: controller.selectedOption,
-                            validator:
-                                Validatorless.required('Campo Obrigatorio'),
+                            validator: Validatorless.required('Campo Obrigatorio'),
                             alignment: Alignment.center,
                             hint: const Text(
                               'Opições',
                               textAlign: TextAlign.center,
                             ),
-                            onChanged: (value) =>
-                                controller.selectedOption = value,
+                            onChanged: (value) => controller.selectedOption = value,
                             items: ListOptionsEnum.values
                                 .map<DropdownMenuItem<String>>(
                                   (e) => DropdownMenuItem(
@@ -200,8 +205,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                   onPressed: () async {
                     _barcodeEC.text = await controller.barcodeScanner();
                     if (_barcodeEC.text != '') {
-                      _nameEC.text = await controller.getInfoBarcode(
-                          barcode: _barcodeEC.text);
+                    _nameEC.text = await controller.getInfoBarcode(barcode: _barcodeEC.text);
                     }
                   },
                 ),
@@ -209,8 +213,7 @@ class _HomePageState extends PageLifeCycleState<HomeController, HomePage> {
                   label: "Salvar",
                   icon: Icons.save,
                   onPressed: () {
-                    final formValid =
-                        _formKey.currentState?.validate() ?? false;
+                    final formValid = _formKey.currentState?.validate() ?? false;
                     _formKey.currentState?.save();
                     if (formValid) {
                       if (controller.selectedDateTime != null) {
