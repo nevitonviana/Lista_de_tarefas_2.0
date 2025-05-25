@@ -10,9 +10,11 @@ class Loader {
   static void show() {
     _entry ??= OverlayEntry(
       builder: (_) => Container(
-        color: Colors.black,
+        color: Colors.black.withValues(alpha: 0.5),
         child: const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation(Colors.white),
+          ),
         ),
       ),
     );
@@ -25,8 +27,9 @@ class Loader {
 
   static void hide() {
     if (_open) {
-      _open = false;
       _entry?.remove();
+      _entry = null;
+      _open = false;
     }
   }
 }

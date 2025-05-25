@@ -28,11 +28,9 @@ class DetailsPage extends StatefulWidget {
   State<DetailsPage> createState() => _DetailsPageState();
 }
 
-class _DetailsPageState
-    extends PageLifeCycleState<DetailsController, DetailsPage> {
+class _DetailsPageState extends PageLifeCycleState<DetailsController, DetailsPage> {
   @override
-  Map<String, dynamic>? get params =>
-      {'name': widget._name, 'searchItem': widget._searchItem};
+  Map<String, dynamic>? get params => {'name': widget._name, 'searchItem': widget._searchItem};
 
   bool _selectionMode = false;
 
@@ -63,7 +61,7 @@ class _DetailsPageState
                             setState(
                               () {
                                 _selectionMode = false;
-                                controller.markedForSharing.clear();
+                                controller.listMarkedForSharing.clear();
                               },
                             );
                           },
@@ -90,17 +88,25 @@ class _DetailsPageState
                     ),
                   ),
                   Visibility(
-                    visible:
-                        controller.listItems.isNotEmpty && widget._name != null,
+                    visible: controller.listItems.isNotEmpty,
                     child: IconButton(
                       onPressed: () {
-                        DialogCustom(context).dialogDelete(
-                          onPressedDelete: () {
-                            controller.deleteAllItems(
-                                optionOfDeletes: widget._name!);
-                          },
-                          label: ' todos os itens de ${widget._name}',
-                        );
+                        if (!_selectionMode) {
+                          DialogCustom(context).dialogDelete(
+                            onPressedDelete: () {
+                              controller.deleteAllItems(optionOfDeletes: widget._name!);
+                            },
+                            label: ' todos os itens de ${widget._name ?? "a lista"}',
+                          );
+                        } else {
+                          DialogCustom(context).dialogDelete(
+                            onPressedDelete: () {
+                              controller.deleteItemList();
+                            },
+                            label: ' a lista selecionada',
+                          );
+                          _selectionMode = false;
+                        }
                       },
                       icon: const Icon(
                         Icons.delete,
@@ -128,12 +134,10 @@ class _DetailsPageState
                       child: CustomDismissible(
                         confirmDismiss: (direction) async {
                           if (direction == DismissDirection.startToEnd) {
-                            await Modular.to
-                                .pushNamed("/home", arguments: item);
+                            await Modular.to.pushNamed("/home", arguments: item);
                             widget._searchItem == null
                                 ? await controller.getItems(item.options)
-                                : controller.searchItemNameOrBarcode(
-                                    search: widget._searchItem!);
+                                : controller.searchItemNameOrBarcode(search: widget._searchItem!);
                           } else {
                             await DialogCustom(context).dialogDelete(
                               label: item.name,
@@ -144,51 +148,42 @@ class _DetailsPageState
                           }
                           return false;
                         },
-                        child: Observer(
-                          builder: (context) {
-                            return _CardDetail(
-                              onTap: _selectionMode
-                                  ? null
-                                  : () async {
-                                      await Modular.to.pushNamed(
-                                          '/details/detailsItem',
-                                          arguments: item);
-                                      widget._searchItem == null
-                                          ? await controller.getItems(item.options)
-                                          : controller.searchItemNameOrBarcode(
-                                              search: widget._searchItem!);
-                                    },
-                              onChanged: (value) {
-
-                                  controller.brandToShare(item: item);
-                                  _selectionMode =
-                                      controller.markedForSharing.isNotEmpty;
-
-                              },
-                              onDoubleTap: () {
-                                final updatedItem =
-                                    item.copyWith(finished: !item.finished);
-                                controller.updateFinished(item: updatedItem);
-                              },
-                              onLongPress: () {
-                                _selectionMode = true;
-                                setState(() {
-                                  controller.brandToShare(item: item);
-                                });
-                              },
-                              isSelectable: _selectionMode,
-                              selectedCard: controller.isItemSelected(item),
-                              isRebaixa: item.finished,
-                              name: item.name,
-                              date: item.date,
-                              isIndicatorByColor:
-                                  item.options == ListOptionsEnum.Rebaixa.name &&
-                                      widget._searchItem == null,
-                              daysForExpiration:
-                                  controller.daysSelectedForExpiration,
-                            );
-                          }
-                        ),
+                        child: Observer(builder: (context) {
+                          return _CardDetail(
+                            onTap: _selectionMode
+                                ? null
+                                : () async {
+                                    await Modular.to
+                                        .pushNamed('/details/detailsItem', arguments: item);
+                                    widget._searchItem == null
+                                        ? await controller.getItems(item.options)
+                                        : controller.searchItemNameOrBarcode(
+                                            search: widget._searchItem!);
+                                  },
+                            onChanged: (value) {
+                              controller.brandToShare(item: item);
+                              _selectionMode = controller.listMarkedForSharing.isNotEmpty;
+                            },
+                            onDoubleTap: () {
+                              final updatedItem = item.copyWith(finished: !item.finished);
+                              controller.updateFinished(item: updatedItem);
+                            },
+                            onLongPress: () {
+                              _selectionMode = true;
+                              setState(() {
+                                controller.brandToShare(item: item);
+                              });
+                            },
+                            isSelectable: _selectionMode,
+                            selectedCard: controller.isItemSelected(item),
+                            isRebaixa: item.finished,
+                            name: item.name,
+                            date: item.date,
+                            isIndicatorByColor: item.options == ListOptionsEnum.Rebaixa.name &&
+                                widget._searchItem == null,
+                            daysForExpiration: controller.daysSelectedForExpiration,
+                          );
+                        }),
                       ),
                     );
                   },
@@ -197,14 +192,12 @@ class _DetailsPageState
                   child: Text.rich(
                     TextSpan(
                       text: "Não ha nenhum ",
-                      style:
-                          const TextStyle(fontSize: 20, color: Colors.black54),
+                      style: const TextStyle(fontSize: 20, color: Colors.black54),
                       children: [
                         TextSpan(
                           text: widget._name ?? "Resultado",
                           style: const TextStyle(
-                              color: Colors.black,
-                              decoration: TextDecoration.underline),
+                              color: Colors.black, decoration: TextDecoration.underline),
                         ),
                       ],
                     ),

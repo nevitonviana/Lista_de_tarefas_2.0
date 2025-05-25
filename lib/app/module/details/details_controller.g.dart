@@ -65,19 +65,20 @@ mixin _$DetailsController on DetailsControllerBase, Store {
     });
   }
 
-  late final _$markedForSharingAtom =
-      Atom(name: 'DetailsControllerBase.markedForSharing', context: context);
+  late final _$listMarkedForSharingAtom = Atom(
+      name: 'DetailsControllerBase.listMarkedForSharing', context: context);
 
   @override
-  ObservableList<ItemModel> get markedForSharing {
-    _$markedForSharingAtom.reportRead();
-    return super.markedForSharing;
+  ObservableList<ItemModel> get listMarkedForSharing {
+    _$listMarkedForSharingAtom.reportRead();
+    return super.listMarkedForSharing;
   }
 
   @override
-  set markedForSharing(ObservableList<ItemModel> value) {
-    _$markedForSharingAtom.reportWrite(value, super.markedForSharing, () {
-      super.markedForSharing = value;
+  set listMarkedForSharing(ObservableList<ItemModel> value) {
+    _$listMarkedForSharingAtom.reportWrite(value, super.listMarkedForSharing,
+        () {
+      super.listMarkedForSharing = value;
     });
   }
 
@@ -96,6 +97,14 @@ mixin _$DetailsController on DetailsControllerBase, Store {
   ObservableFuture<void> deleteItem({required int id}) {
     return ObservableFuture<void>(
         _$deleteItemAsyncAction.run(() => super.deleteItem(id: id)));
+  }
+
+  late final _$deleteItemListAsyncAction =
+      AsyncAction('DetailsControllerBase.deleteItemList', context: context);
+
+  @override
+  Future<void> deleteItemList() {
+    return _$deleteItemListAsyncAction.run(() => super.deleteItemList());
   }
 
   late final _$getDaysSelectedForExpirationAsyncAction = AsyncAction(
@@ -146,7 +155,7 @@ mixin _$DetailsController on DetailsControllerBase, Store {
 listItems: ${listItems},
 daysSelectedForExpiration: ${daysSelectedForExpiration},
 itemFinished: ${itemFinished},
-markedForSharing: ${markedForSharing}
+listMarkedForSharing: ${listMarkedForSharing}
     ''';
   }
 }

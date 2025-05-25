@@ -18,9 +18,9 @@ class StartPageModule extends Module {
   void routes(r) {
     r.child(
       Modular.initialRoute,
-      child: (context) => const StartHomePage(),
+      child: (_) => const StartHomePage(),
     );
-    r.module("/home", module: HomeModule());
-    r.module("/details", module: DetailsModule());
+    r.module('/home', module: HomeModule());
+    r.module('/details', module: DetailsModule());
   }
 }

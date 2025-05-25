@@ -4,4 +4,9 @@ class Failure implements Exception {
   const Failure({
     required this.message,
   });
+
+  @override
+  String toString() {
+    return message;
+  }
 }

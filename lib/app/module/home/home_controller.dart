@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../core/barcode/barcode_scanner/barcode_scanner.dart';
+import '../../core/exception/failure.dart';
 import '../../core/helpers/constants.dart';
 import '../../core/life_cycle/controller_life_cycle.dart';
 import '../../core/local_storage/local_storage.dart';
@@ -27,30 +28,31 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
   final ApiInfoBarcodeService _barcodeService;
   final AppLogger _log;
   final BarcodeScanner _scanner;
-
   final LocalStorage _storage;
-
   final NotificationService _notificationService;
-
-  _HomeControllerBase({
-    required SqfliteService service,
-    required AppLogger log,
-    required BarcodeScanner scanner,
-    required LocalStorage storage,
-    required NotificationService notificationService,
-    required ApiInfoBarcodeService barcodeService,
-  })  : _serviceSQL = service,
-        _log = log,
-        _scanner = scanner,
-        _storage = storage,
-        _notificationService = notificationService,
-        _barcodeService = barcodeService;
+  final SqfliteService _service;
 
   @override
   Future<void> onReady() async {
     await getDaysSelectedForExpiration();
     await _showNotificationForExpiredAndForDowngrading();
   }
+
+  _HomeControllerBase(
+      {required SqfliteService serviceSQL,
+      required ApiInfoBarcodeService barcodeService,
+      required AppLogger log,
+      required BarcodeScanner scanner,
+      required LocalStorage storage,
+      required NotificationService notificationService,
+      required SqfliteService service})
+      : _serviceSQL = serviceSQL,
+        _barcodeService = barcodeService,
+        _log = log,
+        _scanner = scanner,
+        _storage = storage,
+        _notificationService = notificationService,
+        _service = service;
 
   @observable
   DateTime? selectedDateTime;
@@ -111,9 +113,8 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
   Future<String> barcodeScanner() async {
     try {
       final result = await _scanner.barcodeScanner();
-
-      if (result != '-1') {
-        return 'result';
+      if (result != '-1' && result.length == 13) {
+        return result;
       } else {
         Messages.warning("Código de barras inválido");
         return '';
@@ -138,8 +139,7 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
   Future<void> saveDaysSelectedForExpiration({required String days}) async {
     try {
       Loader.show();
-      await _storage.write<String>(
-          Constants.Days_Selected_For_Expiration, days);
+      await _storage.write<String>(Constants.Days_Selected_For_Expiration, days);
       getDaysSelectedForExpiration();
     } catch (e, s) {
       _log.error("Erro ao salvar os dias para vencimento", e, s);
@@ -151,14 +151,12 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
 
   Future<void> _showNotificationForExpiredAndForDowngrading() async {
     try {
-      final result =
-          await _serviceSQL.getItemOption(ListOptionsEnum.Rebaixa.name);
+      final result = await _serviceSQL.getItemOption(ListOptionsEnum.Rebaixa.name);
 
       final days = int.tryParse(daysSelectedForExpiration ?? '10') ?? 10;
 
       for (final e in result) {
-        final resultCheck =
-            Date.checkDate(date: e.date, daysForExpiration: days);
+        final resultCheck = Date.checkDate(date: e.date, daysForExpiration: days);
 
         if (resultCheck == 'rebaixar' && !e.showNotification) {
           _notificationService.showNotification(
@@ -202,11 +200,16 @@ abstract class _HomeControllerBase with Store, ControllerLifeCycle {
   Future<String> getInfoBarcode({required String barcode}) async {
     try {
       Loader.show();
-      final result = await _barcodeService.getInfoBarcode(barcode: barcode);
-      return result?.name ?? '';
-    } catch (e, s) {
+      final resultService = await _service.findByBarcode(barcode);
+      if (resultService != null) {
+        return resultService.name;
+      } else {
+        final result = await _barcodeService.getInfoBarcode(barcode: barcode);
+        return result?.name ?? '';
+      }
+    } on Failure catch (e, s) {
       _log.error("Erro ao buscar informações do código de barras", e, s);
-      Messages.info('Erro ao buscar informações do código de barras');
+      Messages.info(e.message);
     } finally {
       Loader.hide();
     }

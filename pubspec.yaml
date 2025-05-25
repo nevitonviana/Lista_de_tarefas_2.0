@@ -61,6 +61,8 @@ dependencies:
   flutter:
 
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
 
 
@@ -87,6 +89,7 @@ dependencies:
   flutter_local_notifications: ^17.2.1+2
   share_plus: ^11.0.0
   dio: ^5.5.0+1
+  multiple_result: ^5.2.0
 
 
 
@@ -141,6 +144,7 @@ flutter:
   assets:
     - assets/icon/
   #   - images/a_dot_ham.jpeg
+
 
 
 flutter_native_splash:

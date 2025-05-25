@@ -20,7 +20,7 @@ class DioRestClient implements RestClient {
         responseBody: false,
       ),
     );
-    _dio.options.validateStatus = (status) => status! < 500;
+    // _dio.options.validateStatus = (status) => status! < 500;
   }
 
   @override

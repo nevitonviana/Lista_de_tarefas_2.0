@@ -6,29 +6,27 @@ import 'sqflite_service.dart';
 class SqfliteServiceImpl implements SqfliteService {
   final SqfliteRepository _repository;
 
-  SqfliteServiceImpl(
-      {required SqfliteRepository repository, required AppLogger log})
-      : _repository = repository;
+  SqfliteServiceImpl({required SqfliteRepository repository}) : _repository = repository;
 
   @override
   Future<void> saveItem(ItemModel itemModel) => _repository.saveItem(itemModel);
 
   @override
-  Future<List<ItemModel>> getItemOption(String option) =>
-      _repository.getItemOption(option);
+  Future<List<ItemModel>> getItemOption(String option) => _repository.getItemOption(option);
 
   @override
   Future<List<ItemModel>> searchItemBarcodeOrName(String search) =>
       _repository.searchItemBarcodeOrName(search);
 
   @override
-  Future<void> updateItem(ItemModel itemModel) =>
-      _repository.updateItem(itemModel);
+  Future<void> updateItem(ItemModel itemModel) => _repository.updateItem(itemModel);
 
   @override
   Future<void> deleteItem(int id) => _repository.deleteItem(id);
 
   @override
-  Future<void> deleteItemAllOfOptions(String option) =>
-      _repository.deleteItemAllOfOptions(option);
+  Future<void> deleteItemAllOfOptions(String option) => _repository.deleteItemAllOfOptions(option);
+
+  @override
+  Future<ItemModel?> findByBarcode(String barcode) => _repository.findByBarcode(barcode);
 }
